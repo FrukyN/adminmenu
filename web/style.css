@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
 --bg: #0a0c12d1; /* pozadí hlavní */
@@ -9,6 +9,8 @@
 --line: #a5b2cf40; /* Barva mřížky pozadí */
 --accent: #5f84ff; /* male texty */
 --danger: #ff6b6b; 
+--success: #28a745; 
+--warning: #ffc107; 
 --border: #a5b2cf40; 
 --tlacitkaokra: #2e67a1; 
 --tlacitkatext: #eaeaea; 
@@ -56,7 +58,7 @@ body {
 
 
 .topbar {
-  max-width: 1120px;
+  max-width: 1420px;
   margin: 0 auto;
   padding: 1rem;
   display: flex;
@@ -76,7 +78,7 @@ body {
 .nav {
   display: flex;
   cursor: pointer;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .nav a {
@@ -233,6 +235,15 @@ h2 {
   font-size: 0.9rem;
 }
 
+.btn-small2 {
+  padding: 0.5rem 0.95rem;
+  font-size: 0.9rem;
+  color: var(--tlacitkatext2);
+  background: var(--tlacitkobackground2);
+  border: 1px solid var(--tlacitkaokra2);
+
+}
+
 .btn-ghost {
   border: 1px solid var(--tlacitkaokra);
   padding: 0.72rem 1.2rem;
@@ -247,9 +258,9 @@ h2 {
 
 
 .btn-danger {
-  border: 1px solid rgba(213, 36, 62, 0.45);
-  background: rgba(213, 36, 62, 0.12);
-  color: #ffd3da;
+  border: 1px solid var(--tlacitkaokradanger);
+  background: var(--tlacitkobackgrounddanger);
+  color: var(--tlacitkatextdanger);
   box-shadow: none;
 }
 
@@ -274,7 +285,7 @@ h2 {
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--border);
-  background: rgba(18, 4, 4, 0.95);
+  background: var(--card2);
   color: var(--text);
   border-radius: 10px;
   padding: 0.72rem 0.8rem;
@@ -282,12 +293,17 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-  outline: 2px solid rgba(213, 36, 62, 0.35);
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
 .input-search {
-  max-width: 380px;
+  max-width: 340px;
+  margin-bottom: 0;
+}
+
+.input-search2 {
+  max-width: 140px;
   margin-bottom: 0;
 }
 
@@ -346,7 +362,7 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   flex-direction: column;
   height: 360px;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--bg);
   border-radius: 8px;
   border: 1px solid var(--border);
   margin-top: 0.5rem;
@@ -378,7 +394,7 @@ input:focus, select:focus, textarea:focus {
 
 .msg.player {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--card2);
   border-top-left-radius: 2px;
 }
 
@@ -434,14 +450,14 @@ input:focus, select:focus, textarea:focus {
 
 .badge-warning {
   background: var(--card);
-  border: 1px solid #ffc107;
-  color: #ffc107;
+  border: 1px solid var(--warning);
+  color: var(--warning);
 }
 
 .badge-success {
   background: var(--card);
-  border: 1px solid #28a745;
-  color: #28a745;
+  border: 1px solid var(--success);
+  color: var(--success);
 }
 
 /* --- TABULKY (WHITELIST, STAFF) --- */
