@@ -11,20 +11,21 @@
         <div class="bg-grid"></div>
 
         <header class="topbar">
-            <a href="#" class="logo">ADMIN MENU</a>
+            <a href="#" class="logo">ADMINMENU</a>
             <nav class="nav">
                 <a class="nav-item active" data-target="dashboard">Dashboard</a>
                 <a class="nav-item" data-target="players">Hráči</a>
+                <a class="nav-item" data-target="economy">Ekonomika</a>
                 <a class="nav-item" data-target="whitelist">Whitelist</a>
                 <a class="nav-item" data-target="tools">Nástroje</a>
-                <a class="nav-item" data-target="reports">Reporty</a>
+                <a class="nav-item" data-target="reports">[2] Reporty</a>
                 <a class="nav-item" data-target="chat">Chat</a>
                 <a class="nav-item" data-target="logs">Logy</a>
                 <a class="nav-item" data-target="settings">Nastavení</a>
                 <a class="nav-item" data-target="sadmin">Správa adminů</a>
                 <a class="nav-item" data-target="logadmin">Admin Log</a>
             </nav>
-            <button class="btn btn-danger btn-small" id="closeMenuBtn">Zavřít [ESC]</button>
+            <button class="btn btn-danger btn-small" id="closeMenuBtn">Zavřít</button>
         </header>
 
         <hr class="divider">
@@ -32,7 +33,7 @@
         <main>
             <!-- DASHBOARD -->
             <section id="dashboard" class="hero reveal show">
-                <div class="tag">System Status</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Dashboard</h1>
                 <p class="lead">Živý přehled serveru a administrátorských statistik.</p>
 
@@ -53,23 +54,68 @@
                     </div>
                 </div>
 
+                <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Status</span>
+                            <strong id="statStatus">Online</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Uptime</span>
+                            <strong id="statUptime">1 day, 2 hours</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Další restart</span>
+                            <strong id="statNextRestart">1 hour</strong>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="actions">
-                    <button class="btn" data-action="clearArea">Area Wipe (Vyčistit okolí)</button>
-                    <button class="btn btn-ghost" data-action="changeWeather">Změnit počasí</button>
-                    <button class="btn btn-ghost" data-action="freezeTime">Zmrazit čas</button>
-                    <button class="btn btn-danger" data-action="restartWarning">Restart serveru (15 min)</button>
+                    <button class="btn btn-danger" data-action="offserver">Vypnout server</button>
+                    <button class="btn btn-danger" data-action="restartWarning">Restart serveru</button>
+                    <button class="btn btn-danger" data-action="kickAll">Vyhodit všechny hráče</button>
+                    <button class="btn btn-ghost" data-action="sendAnnouncement">Odeslat oznámení</button>
                 </div>
             </section>
 
             <!-- HRÁČI -->
             <section id="players" class="hero reveal hidden">
-                <div class="tag">Player Management</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Správa hráčů</h1>
                 
                 <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Celkem připojených hráčů</span>
+                            <strong id="statStatus">1</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Připojení hráči posledních 24h</span>
+                            <strong id="statUptime">1</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Noví hráči za posledních 24h</span>
+                            <strong id="statNextRestart">+1</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
                     <div class="section-row">
-                        <input type="text" id="searchInput" class="input-search" placeholder="Vyhledat hráče (Jméno, ID, Hex, SPZ...)">
-                        <button class="btn btn-small">Hledat v Offline DB</button>
+                        <input type="text" id="searchInput" class="input-search" placeholder="Vyhledat hráče (Jméno, ID, Hex, SPZ...)"> Filter:
+                        <select id="searchType" class="input-search2">
+                            <option value="admin">Žádný admin</option>
+                            <option value="admin">Je admin</option>
+                            <option value="whitelist">Má whitelist</option>
+                            <option value="note">Má o sobě poznámku </option>
+                            <option value="ban">Má ban/warn </option>
+                        </select>
+                        <label class="checkbox">
+                            <input type="checkbox" id="searchOffline">
+                            <span class="checkmark"></span>
+                            Zobrazit jen online hráče
+                        </label>
                     </div>
                     
                     <div class="cards" id="playerList">
@@ -89,7 +135,7 @@
                             <h3>[Offline] Troll Jméno</h3>
                             <p>Group: <span class="text-accent">user</span></p>
                             <p>Job: unemployed</p>
-                            <button class="btn btn-small btn-modal" data-player="offline" data-name="Troll Jméno">Offline Správa</button>
+                            <button class="btn btn-small2 btn-modal" data-player="offline" data-name="Troll Jméno">Offline Správa</button>
                         </div>
                     </div>
                 </div>
@@ -97,7 +143,7 @@
 
             <!-- WHITELIST -->
             <section id="whitelist" class="hero reveal hidden">
-                <div class="tag">Access Control</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Whitelist Žádosti</h1>
                 <p class="lead">Schvalování nových hráčů do komunity.</p>
 
@@ -147,7 +193,7 @@
 
             <!-- NÁSTROJE (TOOLS) -->
             <section id="tools" class="hero reveal hidden">
-                <div class="tag">Admin Powers</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Nástroje</h1>
                 <p class="lead">Rychlé utility pro administrátory.</p>
 
@@ -200,7 +246,7 @@
 
             <!-- REPORTY -->
             <section id="reports" class="hero reveal hidden">
-                <div class="tag">Tickets</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Aktivní Reporty</h1>
                 <p class="lead">Žádosti o pomoc od hráčů na serveru.</p>
 
@@ -216,6 +262,7 @@
                                 <div class="report-actions">
                                     <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít k hráči</button>
                                     <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1042">Otevřít Chat</button>
+                                    <button class="btn btn-small2" data-action="gotoReportLocation" data-id="1042">Převzít</button>
                                     <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1042">Uzavřít</button>
                                 </div>
                             </div>
@@ -231,6 +278,7 @@
                                 <div class="report-actions">
                                     <button class="btn btn-small" data-action="gotoReportPlayer" data-id="19">Přejít k hráči</button>
                                     <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1041">Otevřít Chat</button>
+                                    <button class="btn btn-small2" data-action="gotoReportLocation" data-id="1042">Převzít</button>
                                     <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1041">Uzavřít</button>
                                 </div>
                             </div>
@@ -241,7 +289,7 @@
 
             <!-- CHAT / ANNOUNCE -->
             <section id="chat" class="hero reveal hidden">
-                <div class="tag">Communication</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Serverový Chat</h1>
                 <p class="lead">Globální hlášení, admin chat a moderace chatu.</p>
 
@@ -281,7 +329,7 @@
 
             <!-- LOGY -->
             <section id="logs" class="hero reveal hidden">
-                <div class="tag">Server Activity</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Serverové Logy</h1>
                 <p class="lead">Živý záznam herních akcí a událostí.</p>
 
@@ -324,7 +372,7 @@
 
             <!-- NASTAVENÍ -->
             <section id="settings" class="hero reveal hidden">
-                <div class="tag">Preferences</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Nastavení Menu</h1>
                 <p class="lead">Konfigurace zobrazení rozhraní a administrátorských voleb.</p>
 
@@ -384,7 +432,7 @@
 
             <!-- SPRÁVA ADMINŮ (SADMIN) -->
             <section id="sadmin" class="hero reveal hidden">
-                <div class="tag">High Staff Only</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Správa Administrátorů</h1>
                 <p class="lead">Přiřazování práv a administrátorských rolí členům týmu.</p>
 
@@ -430,7 +478,7 @@
 
             <!-- ADMIN LOG (LOGADMIN) -->
             <section id="logadmin" class="hero reveal hidden">
-                <div class="tag">Security & Audit</div>
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Admin Audit Log</h1>
                 <p class="lead">Záznam každé administrátorské akce (kdo, co, kdy provedl).</p>
 
@@ -472,7 +520,7 @@
     </div>
 
     <footer class="footer">
-      <p>LEGACY RP &copy; <span id="year"></span> | FiveM Server Admin System</p>
+      <p>LEGACY RP &copy; <span id="year"></span> | Aktualizováno 15.09.2026</p>
     </footer>
 
     <script src="script.js"></script>
