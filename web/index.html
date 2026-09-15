@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FR Admin Menu</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div id="app-container">
+        <div class="bg-grid"></div>
+
+        <header class="topbar">
+            <a href="#" class="logo">ADMIN MENU</a>
+            <nav class="nav">
+                <a class="nav-item active" data-target="dashboard">Dashboard</a>
+                <a class="nav-item" data-target="players">Hráči</a>
+                <a class="nav-item" data-target="whitelist">Whitelist</a>
+                <a class="nav-item" data-target="tools">Nástroje</a>
+                <a class="nav-item" data-target="reports">Reporty</a>
+                <a class="nav-item" data-target="chat">Chat</a>
+                <a class="nav-item" data-target="logs">Logy</a>
+                <a class="nav-item" data-target="settings">Nastavení</a>
+                <a class="nav-item" data-target="sadmin">Správa adminů</a>
+                <a class="nav-item" data-target="logadmin">Admin Log</a>
+            </nav>
+            <button class="btn btn-danger btn-small" id="closeMenuBtn">Zavřít [ESC]</button>
+        </header>
+
+        <hr class="divider">
+
+        <main>
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="hero reveal show">
+                <div class="tag">System Status</div>
+                <h1>Dashboard</h1>
+                <p class="lead">Živý přehled serveru a administrátorských statistik.</p>
+
+                <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Online Hráči</span>
+                            <strong id="statOnlinePlayers">24 / 64</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Aktivní Admini</span>
+                            <strong id="statActiveAdmins">2</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Čekající Reporty</span>
+                            <strong class="text-danger" id="statPendingReports">3</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" data-action="clearArea">Area Wipe (Vyčistit okolí)</button>
+                    <button class="btn btn-ghost" data-action="changeWeather">Změnit počasí</button>
+                    <button class="btn btn-ghost" data-action="freezeTime">Zmrazit čas</button>
+                    <button class="btn btn-danger" data-action="restartWarning">Restart serveru (15 min)</button>
+                </div>
+            </section>
+
+            <!-- HRÁČI -->
+            <section id="players" class="hero reveal hidden">
+                <div class="tag">Player Management</div>
+                <h1>Správa hráčů</h1>
+                
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" id="searchInput" class="input-search" placeholder="Vyhledat hráče (Jméno, ID, Hex, SPZ...)">
+                        <button class="btn btn-small">Hledat v Offline DB</button>
+                    </div>
+                    
+                    <div class="cards" id="playerList">
+                        <div class="card">
+                            <h3>[15] Jan Novák</h3>
+                            <p>Group: <span class="text-accent">user</span></p>
+                            <p>Job: police - officer</p>
+                            <button class="btn btn-small btn-modal" data-player="15" data-name="Jan Novák">Spravovat Hráče</button>
+                        </div>
+                        <div class="card">
+                            <h3>[21] Martin Procházka</h3>
+                            <p>Group: <span class="text-accent">vip</span></p>
+                            <p>Job: ambulance - paramedic</p>
+                            <button class="btn btn-small btn-modal" data-player="21" data-name="Martin Procházka">Spravovat Hráče</button>
+                        </div>
+                        <div class="card">
+                            <h3>[Offline] Troll Jméno</h3>
+                            <p>Group: <span class="text-accent">user</span></p>
+                            <p>Job: unemployed</p>
+                            <button class="btn btn-small btn-modal" data-player="offline" data-name="Troll Jméno">Offline Správa</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WHITELIST -->
+            <section id="whitelist" class="hero reveal hidden">
+                <div class="tag">Access Control</div>
+                <h1>Whitelist Žádosti</h1>
+                <p class="lead">Schvalování nových hráčů do komunity.</p>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" class="input-search" placeholder="Hledat žadatele (Discord tag, Steam HEX)...">
+                        <span class="badge badge-accent">Čeká na schválení: 2</span>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Discord / Jméno</th>
+                                    <th>Identifikátor</th>
+                                    <th>Datum</th>
+                                    <th>Stav</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Kuba_RP</strong> (Jakub Malý)</td>
+                                    <td><code>license:4b22f08...</code></td>
+                                    <td>Dnes, 11:30</td>
+                                    <td><span class="badge badge-warning">Čeká</span></td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small">Schválit</button>
+                                        <button class="btn btn-small btn-danger">Odmítnout</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NightRider</strong> (Petr Černý)</td>
+                                    <td><code>license:8a13a91...</code></td>
+                                    <td>Včera, 22:15</td>
+                                    <td><span class="badge badge-warning">Čeká</span></td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small">Schválit</button>
+                                        <button class="btn btn-small btn-danger">Odmítnout</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NÁSTROJE (TOOLS) -->
+            <section id="tools" class="hero reveal hidden">
+                <div class="tag">Admin Powers</div>
+                <h1>Nástroje</h1>
+                <p class="lead">Rychlé utility pro administrátory.</p>
+
+                <div class="tools-grid">
+                    <div class="card">
+                        <h3>Vlastní Postava</h3>
+                        <p>Základní admin režimy pro tvoji postavu.</p>
+                        <div class="tools-btn-group">
+                            <button class="btn btn-small btn-tool" data-action="toggleNoclip">Noclip (F2)</button>
+                            <button class="btn btn-small btn-tool" data-action="toggleGodmode">Godmode</button>
+                            <button class="btn btn-small btn-tool" data-action="toggleInvis">Neviditelnost</button>
+                            <button class="btn btn-small btn-tool" data-action="reviveSelf">Heal / Revive</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Vozidlo</h3>
+                        <p>Správa vozidla, ve kterém sedíš nebo které sleduješ.</p>
+                        <div class="tools-btn-group">
+                            <button class="btn btn-small btn-tool" data-action="repairVeh">Opravit a vyčistit</button>
+                            <button class="btn btn-small btn-tool" data-action="refuelVeh">Dotankovat (100%)</button>
+                            <button class="btn btn-small btn-tool" data-action="maxTuneVeh">Max Tuning</button>
+                            <button class="btn btn-small btn-tool btn-danger" data-action="deleteVeh">Smazat vozidlo</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Teleportace</h3>
+                        <p>Rychlé přesuny po mapě.</p>
+                        <div class="tools-btn-group">
+                            <button class="btn btn-small btn-tool" data-action="tpWaypoint">Na Waypoint</button>
+                            <button class="btn btn-small btn-tool" data-action="tpCoords">Na Souřadnice</button>
+                            <button class="btn btn-small btn-tool" data-action="tpLegion">Legion Square</button>
+                            <button class="btn btn-small btn-tool" data-action="tpSandy">Sandy Shores</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Svět & Synchronizace</h3>
+                        <p>Globální nastavení světa pro všechny.</p>
+                        <div class="tools-btn-group">
+                            <button class="btn btn-small btn-tool" data-action="wipeVehicles">Smazat opuštěná auta</button>
+                            <button class="btn btn-small btn-tool" data-action="wipePeds">Smazat NPC</button>
+                            <button class="btn btn-small btn-tool" data-action="setTimeNoon">Nastavit čas: 12:00</button>
+                            <button class="btn btn-small btn-tool" data-action="setTimeNight">Nastavit čas: 00:00</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REPORTY -->
+            <section id="reports" class="hero reveal hidden">
+                <div class="tag">Tickets</div>
+                <h1>Aktivní Reporty</h1>
+                <p class="lead">Žádosti o pomoc od hráčů na serveru.</p>
+
+                <div class="panel">
+                    <div class="report-list">
+                        <div class="card report-item">
+                            <div class="report-header">
+                                <div>
+                                    <span class="badge badge-danger">#1042 - RDM / Trolling</span>
+                                    <h3 style="margin-top: 0.3rem;">Někdo mě zabil v nemocnici beze slova</h3>
+                                    <p class="report-meta">Hráč: <strong>Pavel S. (ID: 8)</strong> | Před 3 minutami</p>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít k hráči</button>
+                                    <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1042">Otevřít Chat</button>
+                                    <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1042">Uzavřít</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card report-item">
+                            <div class="report-header">
+                                <div>
+                                    <span class="badge badge-warning">#1041 - Zaseknuté vozidlo</span>
+                                    <h3 style="margin-top: 0.3rem;">Propůjčil jsem se pod texturu u tunelu</h3>
+                                    <p class="report-meta">Hráč: <strong>Marek K. (ID: 19)</strong> | Před 9 minutami</p>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="19">Přejít k hráči</button>
+                                    <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1041">Otevřít Chat</button>
+                                    <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1041">Uzavřít</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAT / ANNOUNCE -->
+            <section id="chat" class="hero reveal hidden">
+                <div class="tag">Communication</div>
+                <h1>Serverový Chat</h1>
+                <p class="lead">Globální hlášení, admin chat a moderace chatu.</p>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <div class="chat-channels">
+                            <button class="btn btn-small active">Staff Chat</button>
+                            <button class="btn btn-small btn-ghost">Globální OOC</button>
+                        </div>
+                        <div class="actions" style="margin: 0;">
+                            <button class="btn btn-small btn-danger" data-action="clearServerChat">Vyčistit chat pro všechny</button>
+                        </div>
+                    </div>
+
+                    <div class="chat-container" style="height: 380px;">
+                        <div class="chat-messages" id="adminStaffChat">
+                            <div class="msg system">Vítej v zabezpečeném admin chatu. Zprávy jsou logovány.</div>
+                            <div class="msg admin"><strong>[Admin] Lukas:</strong> Máme na náměstí hlášený VDM, může se na to někdo podívat?</div>
+                            <div class="msg admin"><strong>[Mod] Honza:</strong> Jedu tam v neviditelnosti, beru to.</div>
+                            <div class="msg player"><strong>[Systém]:</strong> Hráč [44] David byl zabanován systémem Anticheat.</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="staffChatInput" placeholder="Napsat do staff chatu...">
+                            <button class="btn btn-small" id="sendStaffChatBtn">Odeslat</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <h3>Vyslat Globální Oznámení (Announce)</h3>
+                        <div class="section-row" style="margin-top: 0.6rem;">
+                            <input type="text" id="announceInput" placeholder="Zpráva se zobrazí všem hráčům přes celou obrazovku...">
+                            <button class="btn btn-small" data-action="sendAnnouncement">Vyslat Announce</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOGY -->
+            <section id="logs" class="hero reveal hidden">
+                <div class="tag">Server Activity</div>
+                <h1>Serverové Logy</h1>
+                <p class="lead">Živý záznam herních akcí a událostí.</p>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" class="input-search" id="logSearchInput" placeholder="Filtrovat log (ID, jméno, zbraň, částka)...">
+                        <select id="logCategoryFilter" style="max-width: 220px;">
+                            <option value="all">Všechny kategorie</option>
+                            <option value="kills">Zabití (Kills)</option>
+                            <option value="money">Finance & Transakce</option>
+                            <option value="conn">Připojení / Odpojení</option>
+                            <option value="items">Inventář / Výměny</option>
+                        </select>
+                    </div>
+
+                    <div class="logs-feed" id="logsContainer">
+                        <div class="log-entry log-kill">
+                            <span class="log-time">12:18:04</span>
+                            <span class="badge badge-danger">KILL</span>
+                            <span class="log-text"><strong>[12] Jan Novak</strong> zabil hráče <strong>[4] Petr Svoboda</strong> zbraní <code>WEAPON_PISTOL</code></span>
+                        </div>
+                        <div class="log-entry log-money">
+                            <span class="log-time">12:17:42</span>
+                            <span class="badge badge-accent">MONEY</span>
+                            <span class="log-text">Společnost <strong>'police'</strong> převedla <strong>$25,000</strong> na bankovní účet <strong>ID: 15</strong></span>
+                        </div>
+                        <div class="log-entry log-conn">
+                            <span class="log-time">12:15:10</span>
+                            <span class="badge badge-success">CONNECT</span>
+                            <span class="log-text">Hráč <strong>Martin Procházka</strong> se připojil (ID: 21 | steam:1100001...)</span>
+                        </div>
+                        <div class="log-entry log-item">
+                            <span class="log-time">12:10:02</span>
+                            <span class="badge badge-warning">ITEM</span>
+                            <span class="log-text">Hráč <strong>[3] Tomas_K</strong> vložil <code>5x repairkit</code> do kufru vozidla <code>ABC 1234</code></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NASTAVENÍ -->
+            <section id="settings" class="hero reveal hidden">
+                <div class="tag">Preferences</div>
+                <h1>Nastavení Menu</h1>
+                <p class="lead">Konfigurace zobrazení rozhraní a administrátorských voleb.</p>
+
+                <div class="panel">
+                    <div class="settings-grid">
+                        <div class="card">
+                            <h3>Administrátorské Volby</h3>
+                            <div class="setting-item">
+                                <div>
+                                    <strong>Admin Duty při otevření</strong>
+                                    <p class="k">Automaticky aktivovat staff režim po otevření tohoto menu.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <strong>Zobrazovat Player IDs</strong>
+                                    <p class="k">Vykreslovat overhead ID štítky nad hlavami hráčů v okolí.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="settingShowIds">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Vzhled & Rozhraní</h3>
+                            <div class="setting-item">
+                                <div>
+                                    <strong>Zvuky rozhraní</strong>
+                                    <p class="k">Přehrávat zvuky při kliknutí na tlačítka a přepínání tabů.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <strong>Průhlednost pozadí</strong>
+                                    <p class="k">Úroveň rozostření (blur) na pozadí herního světa.</p>
+                                </div>
+                                <select style="max-width: 140px;">
+                                    <option value="medium">Střední</option>
+                                    <option value="none">Žádné</option>
+                                    <option value="heavy">Silné</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SPRÁVA ADMINŮ (SADMIN) -->
+            <section id="sadmin" class="hero reveal hidden">
+                <div class="tag">High Staff Only</div>
+                <h1>Správa Administrátorů</h1>
+                <p class="lead">Přiřazování práv a administrátorských rolí členům týmu.</p>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Aktivní Členové Týmu</h3>
+                        <button class="btn btn-small" id="btnAddAdminModal">+ Přidat Nového Admina</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Admin Jméno</th>
+                                    <th>Identifikátor</th>
+                                    <th>Role / Oprávnění</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Karlos (Owner)</strong></td>
+                                    <td><code>license:98c21a44...</code></td>
+                                    <td><span class="badge badge-accent">SuperAdmin</span></td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small btn-ghost" disabled>Upravit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>David_Mod</strong></td>
+                                    <td><code>license:12f77bc1...</code></td>
+                                    <td><span class="badge badge-warning">Trial Admin</span></td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small">Změnit Roli</button>
+                                        <button class="btn btn-small btn-danger">Odebrat</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADMIN LOG (LOGADMIN) -->
+            <section id="logadmin" class="hero reveal hidden">
+                <div class="tag">Security & Audit</div>
+                <h1>Admin Audit Log</h1>
+                <p class="lead">Záznam každé administrátorské akce (kdo, co, kdy provedl).</p>
+
+                <div class="panel">
+                    <div class="logs-feed">
+                        <div class="log-entry">
+                            <span class="log-time">12:16:50</span>
+                            <span class="badge badge-danger">AUDIT</span>
+                            <span class="log-text">Admin <strong>Karlos</strong> provedl <strong>Area Wipe</strong> v okruhu 150m</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">12:05:12</span>
+                            <span class="badge badge-danger">AUDIT</span>
+                            <span class="log-text">Admin <strong>David_Mod</strong> použil příkaz <strong>/revive</strong> na hráče <strong>Jan Novák [15]</strong></span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">11:42:00</span>
+                            <span class="badge badge-danger">AUDIT</span>
+                            <span class="log-text">Admin <strong>Karlos</strong> změnil skupinu hráče <strong>Martin Procházka [21]</strong> na <code>vip</code></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODALY (DETAIL HRÁČE, TICKETY...) -->
+    <div id="playerModal" class="modal">
+        <div class="modal-box">
+            <button class="modal-close" id="closeModalBtn">✕</button>
+            <h2 id="modalPlayerName">Detail hráče</h2>
+            <div class="actions" style="margin-top: 1rem;">
+                <button class="btn btn-small" id="btnPedMenu">Vynutit PedMenu</button>
+                <button class="btn btn-small" data-action="healPlayer">Oživit / Heal</button>
+                <button class="btn btn-small" data-action="gotoPlayer">Teleportovat k hráči</button>
+                <button class="btn btn-small btn-danger" id="btnLogout">Odhlásit (Kick)</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+      <p>LEGACY RP &copy; <span id="year"></span> | FiveM Server Admin System</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
