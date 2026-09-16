@@ -17,14 +17,16 @@
                 <a class="nav-item" data-target="players">Hráči</a>
                 <a class="nav-item" data-target="vozidla">Vozidla</a>
                 <a class="nav-item" data-target="economy">Ekonomika</a>
+                <a class="nav-item" data-target="bans">Bany</a>
                 <a class="nav-item" data-target="whitelist">Whitelist</a>
                 <a class="nav-item" data-target="tools">Nástroje</a>
+                <a class="nav-item" data-target="map">Mapa</a>
                 <a class="nav-item" data-target="reports"><span style="color: red;">[2]</span>Reporty</a>
                 <a class="nav-item" data-target="chat">Chat</a>
                 <a class="nav-item" data-target="logs">Logy</a>
                 <a class="nav-item" data-target="settings">Nastavení</a>
-                <a class="nav-item" data-target="sadmin">Správa adminů</a>
-                <a class="nav-item" data-target="logadmin">Admin Log</a>
+                <a class="nav-item" data-target="sadmin"><span style="color: var(--danger);">Správa adminů</span></a>
+                <a class="nav-item" data-target="logadmin"><span style="color: var(--danger);">Admin Log</span></a>
             </nav>
             <button class="btn btn-danger btn-small" id="closeMenuBtn">Zavřít</button>
         </header>
@@ -50,7 +52,7 @@
                         </div>
                         <div class="panel-status">
                             <span class="k">Čekající Reporty</span>
-                            <strong class="text-danger" id="statPendingReports">2</strong>
+                            <strong class="text-danger" id="statPendingReports">3</strong>
                         </div>
                     </div>
                 </div>
@@ -316,6 +318,139 @@
                 </div>
             </section>
 
+            <!-- BANY & WARNY -->
+            <section id="bans" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Bany & Varování</h1>
+                <p class="lead">Správa aktivních banů, varování a rychlé udělení nového banu.</p>
+
+                <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Aktivní bany</span>
+                            <strong id="statActiveBans">14</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Aktivní varování</span>
+                            <strong id="statActiveWarns">6</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Bany za posledních 24h</span>
+                            <strong id="statBans24h">2</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Nový ban</h3>
+                    </div>
+                    <div class="tools-grid" style="grid-template-columns: repeat(4, minmax(0,1fr));">
+                        <div class="form-group">
+                            <label for="banPlayerId">ID / Identifikátor hráče</label>
+                            <input type="text" id="banPlayerId" placeholder="např. 15 nebo license:...">
+                        </div>
+                        <div class="form-group">
+                            <label for="banReason">Důvod</label>
+                            <input type="text" id="banReason" placeholder="Cheating, RDM...">
+                        </div>
+                        <div class="form-group">
+                            <label for="banDuration">Délka</label>
+                            <select id="banDuration">
+                                <option value="1h">1 hodina</option>
+                                <option value="1d">1 den</option>
+                                <option value="7d">7 dní</option>
+                                <option value="30d">30 dní</option>
+                                <option value="perm">Permanentní</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-small btn-danger" id="btnQuickBan">Banovat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Aktivní bany</h3>
+                        <input type="text" class="input-search" id="banSearchInput" placeholder="Hledat podle jména nebo identifikátoru...">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hráč</th>
+                                    <th>Identifikátor</th>
+                                    <th>Důvod</th>
+                                    <th>Uděleno</th>
+                                    <th>Vyprší</th>
+                                    <th>Admin</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody id="banList">
+                                <tr>
+                                    <td><strong>xNoScope_Petr</strong></td>
+                                    <td><code>license:9f11c02...</code></td>
+                                    <td>Cheating (aimbot)</td>
+                                    <td>Dnes, 10:12</td>
+                                    <td><span class="badge badge-danger">Permanentní</span></td>
+                                    <td>Karlos</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="9f11c02">Odbanovat</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tomáš Bureš</strong></td>
+                                    <td><code>license:33ab910...</code></td>
+                                    <td>RDM opakovaně</td>
+                                    <td>Včera, 21:04</td>
+                                    <td><span class="badge badge-warning">Za 6 dní</span></td>
+                                    <td>David_Mod</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="33ab910">Odbanovat</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Aktivní varování</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hráč</th>
+                                    <th>Důvod</th>
+                                    <th>Počet varování</th>
+                                    <th>Uděleno</th>
+                                    <th>Admin</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warnList">
+                                <tr>
+                                    <td><strong>[15] Jan Novák</strong></td>
+                                    <td>Nevhodné RP jednání</td>
+                                    <td><span class="badge badge-warning">2 / 3</span></td>
+                                    <td>Dnes, 09:40</td>
+                                    <td>David_Mod</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small btn-danger" data-action="clearWarn" data-id="15">Zrušit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="k" style="margin-top: 0.6rem;">Při dosažení 3 varování je hráč automaticky navržen k dočasnému banu.</p>
+                </div>
+            </section>
+
             <!-- WHITELIST -->
             <section id="whitelist" class="hero reveal hidden">
                 <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
@@ -415,6 +550,73 @@
                             <button class="btn btn-small btn-tool" data-action="setTimeNoon">Nastavit čas: 12:00</button>
                             <button class="btn btn-small btn-tool" data-action="setTimeNight">Nastavit čas: 00:00</button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAPA -->
+            <section id="map" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Live Mapa Hráčů</h1>
+                <p class="lead">Poloha online hráčů, adminů a otevřených reportů v reálném čase.</p>
+
+                <div class="panel">
+                    <div class="map-wrap" id="mapCanvas">
+                        <div class="map-blip player" style="top: 42%; left: 38%;" data-player="15" data-name="Jan Novák" title="[15] Jan Novák"></div>
+                        <div class="map-blip player" style="top: 61%; left: 55%;" data-player="8" data-name="Pavel S." title="[8] Pavel S."></div>
+                        <div class="map-blip player" style="top: 30%; left: 70%;" data-player="21" data-name="Martin Procházka" title="[21] Martin Procházka"></div>
+                        <div class="map-blip admin" style="top: 50%; left: 48%;" title="Admin: Karlos"></div>
+                        <div class="map-blip report" style="top: 47%; left: 40%;" title="Report #1042 - RDM"></div>
+                    </div>
+                    <div class="map-legend">
+                        <span><span class="dot player"></span> Hráč</span>
+                        <span><span class="dot admin"></span> Admin on-duty</span>
+                        <span><span class="dot report"></span> Aktivní report</span>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Online hráči</h3>
+                        <input type="text" class="input-search" id="mapPlayerSearch" placeholder="Hledat hráče na mapě...">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="mapPlayerTable">
+                            <thead>
+                                <tr>
+                                    <th>Hráč</th>
+                                    <th>Souřadnice</th>
+                                    <th>Zóna</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>[15] Jan Novák</strong></td>
+                                    <td><code>-215.4, -890.1, 30.2</code></td>
+                                    <td>Nemocnice Pillbox</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="15">Přejít</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>[8] Pavel S.</strong></td>
+                                    <td><code>120.8, -1280.5, 29.0</code></td>
+                                    <td>Legion Square</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>[21] Martin Procházka</strong></td>
+                                    <td><code>2440.1, 4990.8, 38.0</code></td>
+                                    <td>Sandy Shores</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="21">Přejít</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -593,6 +795,50 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Discord Webhook Log</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="discordWebhookUrl">Webhook URL</label>
+                        <input type="text" id="discordWebhookUrl" placeholder="https://discord.com/api/webhooks/...">
+                    </div>
+                    <div class="settings-grid" style="margin-top: 1rem;">
+                        <div class="setting-item">
+                            <span>Admin akce (audit log)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="webhookAudit" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Bany a varování</span>
+                            <label class="switch">
+                                <input type="checkbox" id="webhookBans" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Ekonomika (transakce)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="webhookEconomy">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Staff chat</span>
+                            <label class="switch">
+                                <input type="checkbox" id="webhookChat">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="actions" style="margin-top: 1rem;">
+                        <button class="btn btn-small" id="btnSaveWebhook">Uložit</button>
+                        <button class="btn btn-small btn-ghost" id="btnTestWebhook">Odeslat testovací zprávu</button>
+                    </div>
+                </div>
             </section>
 
             <!-- SPRÁVA ADMINŮ (SADMIN) -->
@@ -631,9 +877,45 @@
                                     <td><code>license:12f77bc1...</code></td>
                                     <td><span class="badge badge-warning">Trial Admin</span></td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small">Změnit Roli</button>
+                                        <button class="btn btn-small btn-edit-permissions" data-admin="David_Mod">Upravit Práva</button>
                                         <button class="btn btn-small btn-danger">Odebrat</button>
                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Staff Duty Tracking</h3>
+                        <span class="k">Posledních 7 dní</span>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Admin</th>
+                                    <th>Hodiny na duty</th>
+                                    <th>Vyřešené reporty</th>
+                                    <th>Průměrná reakce</th>
+                                    <th>Stav</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Karlos</strong></td>
+                                    <td>18h 42m</td>
+                                    <td>27</td>
+                                    <td>1m 20s</td>
+                                    <td><span class="badge badge-success">Na duty</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>David_Mod</strong></td>
+                                    <td>6h 05m</td>
+                                    <td>9</td>
+                                    <td>3m 45s</td>
+                                    <td><span class="badge badge-danger">Mimo duty</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -672,15 +954,97 @@
 
     <!-- MODALY (DETAIL HRÁČE, TICKETY...) -->
     <div id="playerModal" class="modal">
-        <div class="modal-box">
+        <div class="modal-box modal-box-lg">
             <button class="modal-close" id="closeModalBtn">✕</button>
             <h2 id="modalPlayerName">Detail hráče</h2>
+
             <div class="actions" style="margin-top: 1rem;">
                 <button class="btn btn-small" id="btnPedMenu">Vynutit PedMenu</button>
                 <button class="btn btn-small" data-action="healPlayer">Oživit / Heal</button>
                 <button class="btn btn-small" data-action="gotoPlayer">Teleportovat k hráči</button>
+                <button class="btn btn-small" data-action="bringPlayer">Přitáhnout k sobě</button>
+                <button class="btn btn-small" data-action="spectatePlayer">Spectate</button>
+                <button class="btn btn-small btn-ghost" data-action="screenshotPlayer">Vyžádat Screenshot</button>
+                <button class="btn btn-small" id="btnFreezePlayer" data-frozen="false">Zamknout (Freeze)</button>
                 <button class="btn btn-small btn-danger" id="btnLogout">Odhlásit (Kick)</button>
             </div>
+
+            <div class="card" style="margin-top: 1.2rem;">
+                <h3>Identifikátory</h3>
+                <div class="text-block" id="modalIdentifiers">
+                    <p>Steam: <code>steam:11000010a1b2c3</code></p>
+                    <p>License: <code>license:98c21a44f...</code></p>
+                    <p>Discord: <code>discord:441022...</code></p>
+                    <p>IP: <code>89.24.xx.xx</code></p>
+                    <p>Naposledy hraný nick: <code>Jan_N</code> | Registrace: <code>12.03.2025</code></p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Poznámka správce</h3>
+                <textarea id="staffNoteInput" rows="3" placeholder="Interní poznámka viditelná pro všechny adminy..."></textarea>
+                <button class="btn btn-small" id="btnSaveNote" style="margin-top: 0.6rem;">Uložit poznámku</button>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Varování</h3>
+                <div class="report-list" id="warnsList">
+                    <div class="log-entry">
+                        <span class="badge badge-warning">1/3</span>
+                        <span class="log-text">Nevhodné RP jednání — uděleno <strong>David_Mod</strong>, dnes 09:40</span>
+                    </div>
+                </div>
+                <div class="section-row" style="margin-top: 0.8rem; margin-bottom: 0;">
+                    <input type="text" id="warnReasonInput" class="input-search" placeholder="Důvod varování...">
+                    <button class="btn btn-small btn-danger" id="btnAddWarn">Udělit varování</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Banovat hráče</h3>
+                <div class="tools-grid" style="grid-template-columns: 2fr 1fr 1fr;">
+                    <div class="form-group">
+                        <label for="modalBanReason">Důvod</label>
+                        <input type="text" id="modalBanReason" placeholder="Cheating, RDM...">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalBanDuration">Délka</label>
+                        <select id="modalBanDuration">
+                            <option value="1h">1 hodina</option>
+                            <option value="1d">1 den</option>
+                            <option value="7d">7 dní</option>
+                            <option value="30d">30 dní</option>
+                            <option value="perm">Permanentní</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-small btn-danger" id="btnModalBan">Banovat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ÚPRAVA OPRÁVNĚNÍ ADMINA (ACL) -->
+    <div id="permissionsModal" class="modal">
+        <div class="modal-box">
+            <button class="modal-close" id="closePermissionsModalBtn">✕</button>
+            <h2 id="modalAdminName">Oprávnění administrátora</h2>
+            <p class="lead" style="margin-top: 0.4rem;">Zvol, jaké akce může tento admin ve menu provádět.</p>
+
+            <div class="permissions-grid">
+                <label class="permission-item"><input type="checkbox" data-perm="players" checked> Správa hráčů (heal, tp, kick)</label>
+                <label class="permission-item"><input type="checkbox" data-perm="ban"> Bany a varování</label>
+                <label class="permission-item"><input type="checkbox" data-perm="economy"> Ekonomika</label>
+                <label class="permission-item"><input type="checkbox" data-perm="vehicles" checked> Vozidla</label>
+                <label class="permission-item"><input type="checkbox" data-perm="whitelist"> Whitelist</label>
+                <label class="permission-item"><input type="checkbox" data-perm="chat" checked> Moderace chatu</label>
+                <label class="permission-item"><input type="checkbox" data-perm="server"> Server (restart, vypnutí)</label>
+                <label class="permission-item"><input type="checkbox" data-perm="staffmanage"> Správa administrátorů</label>
+            </div>
+
+            <button class="btn btn-small" id="btnSavePermissions" style="margin-top: 1.2rem;">Uložit oprávnění</button>
         </div>
     </div>
 
