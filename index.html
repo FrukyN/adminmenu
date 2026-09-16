@@ -19,7 +19,7 @@
                 <a class="nav-item" data-target="economy">Ekonomika</a>
                 <a class="nav-item" data-target="whitelist">Whitelist</a>
                 <a class="nav-item" data-target="tools">Nástroje</a>
-                <a class="nav-item" data-target="reports">[2] Reporty</a>
+                <a class="nav-item" data-target="reports"><span style="color: red;">[2]</span>Reporty</a>
                 <a class="nav-item" data-target="chat">Chat</a>
                 <a class="nav-item" data-target="logs">Logy</a>
                 <a class="nav-item" data-target="settings">Nastavení</a>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="panel-status">
                             <span class="k">Čekající Reporty</span>
-                            <strong class="text-danger" id="statPendingReports">3</strong>
+                            <strong class="text-danger" id="statPendingReports">2</strong>
                         </div>
                     </div>
                 </div>
@@ -181,6 +181,136 @@
                             <p>Group: <span class="text-accent">user</span></p>
                             <p>Job: unemployed</p>
                             <button class="btn btn-small2 btn-modal" data-player="offline" data-name="Troll Jméno">Offline Správa</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EKONOMIKA -->
+            <section id="economy" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Ekonomika</h1>
+                <p class="lead">Přehled a správa serverové ekonomiky, firemních účtů a hráčských financí.</p>
+
+                <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Peníze v ekonomice</span>
+                            <strong id="statTotalMoney">$48,215,900</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Aktivní firmy</span>
+                            <strong id="statTotalCompanies">9</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Transakce za 24h</span>
+                            <strong id="statTransactions24h">1 284</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Úprava financí hráče</h3>
+                    </div>
+                    <div class="tools-grid" style="grid-template-columns: repeat(4, minmax(0,1fr));">
+                        <div class="form-group">
+                            <label for="ecoPlayerId">ID Hráče</label>
+                            <input type="text" id="ecoPlayerId" placeholder="např. 15">
+                        </div>
+                        <div class="form-group">
+                            <label for="ecoAmount">Částka</label>
+                            <input type="number" id="ecoAmount" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="ecoAccountType">Typ účtu</label>
+                            <select id="ecoAccountType">
+                                <option value="cash">Hotovost</option>
+                                <option value="bank">Banka</option>
+                                <option value="black">Černé peníze</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <div style="display:flex; gap:0.5rem;">
+                                <button class="btn btn-small" id="btnEcoAdd">Přidat</button>
+                                <button class="btn btn-small btn-danger" id="btnEcoRemove">Odebrat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Firemní účty</h3>
+                        <input type="text" class="input-search" id="companySearchInput" placeholder="Hledat firmu...">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Název firmy</th>
+                                    <th>Majitel</th>
+                                    <th>Zůstatek</th>
+                                    <th>Zaměstnanci</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody id="companyList">
+                                <tr>
+                                    <td><strong>LSPD</strong></td>
+                                    <td>Systém</td>
+                                    <td><span class="text-success">$1,240,500</span></td>
+                                    <td>18</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="lspd">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="lspd">Log</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Burger Shot</strong></td>
+                                    <td>Karel Novák</td>
+                                    <td><span class="text-success">$84,320</span></td>
+                                    <td>4</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="burgershot">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="burgershot">Log</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bennys</strong></td>
+                                    <td>Petr Malý</td>
+                                    <td><span class="text-danger">-$12,050</span></td>
+                                    <td>2</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="bennys">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="bennys">Log</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Poslední transakce</h3>
+                    </div>
+                    <div class="logs-feed" id="economyLogsContainer">
+                        <div class="log-entry">
+                            <span class="log-time">12:21:03</span>
+                            <span class="badge badge-success">VKLAD</span>
+                            <span class="log-text">Hráč <strong>[15] Jan Novák</strong> vložil <strong>$5,000</strong> na bankovní účet</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">12:19:47</span>
+                            <span class="badge badge-danger">VÝBĚR</span>
+                            <span class="log-text">Hráč <strong>[8] Pavel S.</strong> vybral <strong>$1,200</strong> hotovosti</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">12:17:42</span>
+                            <span class="badge badge-accent">FIRMA</span>
+                            <span class="log-text">Společnost <strong>'Burger Shot'</strong> vyplatila výplaty zaměstnancům, celkem <strong>$3,400</strong></span>
                         </div>
                     </div>
                 </div>
