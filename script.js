@@ -60,12 +60,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnPedMenu = document.getElementById('btnPedMenu');
     const btnLogout = document.getElementById('btnLogout');
 
+    const resetPlayerModalState = () => {
+        const freezeBtn = document.getElementById('btnFreezePlayer');
+        if (freezeBtn) {
+            freezeBtn.setAttribute('data-frozen', 'false');
+            freezeBtn.innerText = 'Zamknout (Freeze)';
+        }
+        const noteInput = document.getElementById('staffNoteInput');
+        if (noteInput) noteInput.value = '';
+        const warnInput = document.getElementById('warnReasonInput');
+        if (warnInput) warnInput.value = '';
+    };
+
     document.querySelectorAll('.btn-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
             selectedPlayerId = e.target.getAttribute('data-player');
             const playerName = e.target.getAttribute('data-name');
             
             if (modalTitle) modalTitle.innerText = `Správa: ${playerName} (ID: ${selectedPlayerId})`;
+            resetPlayerModalState();
             if (modal) modal.classList.add('show');
         });
     });
@@ -188,12 +201,171 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- FREEZE TOGGLE V PLAYER MODALU ---
+    const btnFreezePlayer = document.getElementById('btnFreezePlayer');
+    if (btnFreezePlayer) {
+        btnFreezePlayer.addEventListener('click', () => {
+            if (!selectedPlayerId || selectedPlayerId === 'offline') return;
+            const isFrozen = btnFreezePlayer.getAttribute('data-frozen') === 'true';
+            const newState = !isFrozen;
+            btnFreezePlayer.setAttribute('data-frozen', String(newState));
+            btnFreezePlayer.innerText = newState ? 'Odemknout (Unfreeze)' : 'Zamknout (Freeze)';
+            sendNUI('executeAction', { action: 'toggleFreeze', id: selectedPlayerId, state: newState });
+        });
+    }
+
+    // --- POZNÁMKA SPRÁVCE ---
+    const btnSaveNote = document.getElementById('btnSaveNote');
+    const staffNoteInput = document.getElementById('staffNoteInput');
+    if (btnSaveNote) {
+        btnSaveNote.addEventListener('click', () => {
+            if (!selectedPlayerId || !staffNoteInput) return;
+            sendNUI('executeAction', { action: 'saveStaffNote', id: selectedPlayerId, note: staffNoteInput.value.trim() });
+        });
+    }
+
+    // --- UDĚLENÍ VAROVÁNÍ ---
+    const btnAddWarn = document.getElementById('btnAddWarn');
+    const warnReasonInput = document.getElementById('warnReasonInput');
+    const warnsList = document.getElementById('warnsList');
+    if (btnAddWarn) {
+        btnAddWarn.addEventListener('click', () => {
+            const reason = warnReasonInput?.value.trim();
+            if (!selectedPlayerId || !reason) return;
+
+            sendNUI('executeAction', { action: 'addWarn', id: selectedPlayerId, reason });
+
+            if (warnsList) {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `<span class="badge badge-warning">Nové</span><span class="log-text">${reason} — uděleno právě teď</span>`;
+                warnsList.appendChild(entry);
+            }
+            if (warnReasonInput) warnReasonInput.value = '';
+        });
+    }
+
+    // --- BANOVÁNÍ (Z PLAYER MODALU) ---
+    const btnModalBan = document.getElementById('btnModalBan');
+    if (btnModalBan) {
+        btnModalBan.addEventListener('click', () => {
+            const reason = document.getElementById('modalBanReason')?.value.trim();
+            const duration = document.getElementById('modalBanDuration')?.value;
+            if (!selectedPlayerId || !reason) return;
+
+            sendNUI('executeAction', { action: 'banPlayer', id: selectedPlayerId, reason, duration });
+        });
+    }
+
+    // --- RYCHLÝ BAN (SEKCE BANY) ---
+    const btnQuickBan = document.getElementById('btnQuickBan');
+    if (btnQuickBan) {
+        btnQuickBan.addEventListener('click', () => {
+            const targetId = document.getElementById('banPlayerId')?.value.trim();
+            const reason = document.getElementById('banReason')?.value.trim();
+            const duration = document.getElementById('banDuration')?.value;
+            if (!targetId || !reason) return;
+
+            sendNUI('executeAction', { action: 'banPlayer', id: targetId, reason, duration });
+        });
+    }
+
+    // --- VYHLEDÁVÁNÍ V BANECH ---
+    const banSearchInput = document.getElementById('banSearchInput');
+    if (banSearchInput) {
+        banSearchInput.addEventListener('keyup', (e) => {
+            const filter = e.target.value.toLowerCase();
+            document.querySelectorAll('#banList tr').forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+            });
+        });
+    }
+
+    // --- VYHLEDÁVÁNÍ HRÁČŮ NA MAPĚ ---
+    const mapPlayerSearch = document.getElementById('mapPlayerSearch');
+    if (mapPlayerSearch) {
+        mapPlayerSearch.addEventListener('keyup', (e) => {
+            const filter = e.target.value.toLowerCase();
+            document.querySelectorAll('#mapPlayerTable tbody tr').forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+            });
+        });
+    }
+
+    // --- KLIKNUTÍ NA BLIP NA MAPĚ (otevře player modal) ---
+    document.querySelectorAll('.map-blip[data-player]').forEach(blip => {
+        blip.addEventListener('click', () => {
+            selectedPlayerId = blip.getAttribute('data-player');
+            const playerName = blip.getAttribute('data-name');
+            if (modalTitle) modalTitle.innerText = `Správa: ${playerName} (ID: ${selectedPlayerId})`;
+            resetPlayerModalState();
+            if (modal) modal.classList.add('show');
+        });
+    });
+
+    // --- ACL: MODAL ÚPRAVY OPRÁVNĚNÍ ADMINA ---
+    const permissionsModal = document.getElementById('permissionsModal');
+    const modalAdminName = document.getElementById('modalAdminName');
+    const closePermissionsModalBtn = document.getElementById('closePermissionsModalBtn');
+    const btnSavePermissions = document.getElementById('btnSavePermissions');
+    let selectedAdminName = null;
+
+    document.querySelectorAll('.btn-edit-permissions').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            selectedAdminName = e.target.getAttribute('data-admin');
+            if (modalAdminName) modalAdminName.innerText = `Oprávnění administrátora: ${selectedAdminName}`;
+            if (permissionsModal) permissionsModal.classList.add('show');
+        });
+    });
+
+    if (closePermissionsModalBtn && permissionsModal) {
+        closePermissionsModalBtn.addEventListener('click', () => permissionsModal.classList.remove('show'));
+    }
+
+    if (btnSavePermissions) {
+        btnSavePermissions.addEventListener('click', () => {
+            const perms = {};
+            document.querySelectorAll('#permissionsModal input[data-perm]').forEach(input => {
+                perms[input.getAttribute('data-perm')] = input.checked;
+            });
+            sendNUI('executeAction', { action: 'saveAdminPermissions', admin: selectedAdminName, permissions: perms });
+            if (permissionsModal) permissionsModal.classList.remove('show');
+        });
+    }
+
+    // --- DISCORD WEBHOOK ---
+    const btnSaveWebhook = document.getElementById('btnSaveWebhook');
+    const btnTestWebhook = document.getElementById('btnTestWebhook');
+
+    if (btnSaveWebhook) {
+        btnSaveWebhook.addEventListener('click', () => {
+            sendNUI('executeAction', {
+                action: 'saveWebhookConfig',
+                url: document.getElementById('discordWebhookUrl')?.value.trim(),
+                categories: {
+                    audit: document.getElementById('webhookAudit')?.checked,
+                    bans: document.getElementById('webhookBans')?.checked,
+                    economy: document.getElementById('webhookEconomy')?.checked,
+                    chat: document.getElementById('webhookChat')?.checked
+                }
+            });
+        });
+    }
+
+    if (btnTestWebhook) {
+        btnTestWebhook.addEventListener('click', () => {
+            sendNUI('executeAction', { action: 'testWebhook' });
+        });
+    }
+
     // --- ZAVÍRÁNÍ ---
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeNUI);
 
     document.addEventListener('keyup', (e) => {
         if (e.key === "Escape") {
-            if (modal && modal.classList.contains('show')) {
+            if (permissionsModal && permissionsModal.classList.contains('show')) {
+                permissionsModal.classList.remove('show');
+            } else if (modal && modal.classList.contains('show')) {
                 modal.classList.remove('show');
             } else {
                 closeNUI();
