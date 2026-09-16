@@ -15,6 +15,7 @@
             <nav class="nav">
                 <a class="nav-item active" data-target="dashboard">Dashboard</a>
                 <a class="nav-item" data-target="players">Hráči</a>
+                <a class="nav-item" data-target="players">Vozidla</a>
                 <a class="nav-item" data-target="economy">Ekonomika</a>
                 <a class="nav-item" data-target="whitelist">Whitelist</a>
                 <a class="nav-item" data-target="tools">Nástroje</a>
@@ -40,7 +41,7 @@
                 <div class="panel">
                     <div class="status-grid">
                         <div class="panel-status">
-                            <span class="k">Online Hráči</span>
+                            <span class="k">Online i</span>
                             <strong id="statOnlinePlayers">24 / 64</strong>
                         </div>
                         <div class="panel-status">
@@ -78,7 +79,44 @@
                     <button class="btn btn-ghost" data-action="sendAnnouncement">Odeslat oznámení</button>
                 </div>
             </section>
+ <!-- Vozidla -->
+            <section id="vozidla" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Správa vozidel</h1>
+                
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" id="searchInput" class="input-search" placeholder="id,plate,vin,owner,model"> Filter:
+                        <select id="searchType" class="input-search2">
+                            <option value="admin">filtr</option>
+                            <option value="admin">filtr</option>
+                            <option value="whitelist">filtr</option>
+                            <option value="note">filtr</option>
+                            <option value="ban">filtr</option>
+                        </select>
+                    </div>
+                    
+                    <div class="cards" id="playerList">
+                        <div class="card">
+                            <h3>Asea</h3>
+                            <p>id</p>                                                        
+                            <p>plate</p>                                                        
+                            <p>vin</p>                                                        
+                            <p>owner</p>                                                        
+                            <p>group</p> 
+                            <p>model</p>                                                        
+                            <p>class</p>                                                        
+                            <p>data</p>                                                        
+                            <p>trunk</p>                                                        
+                            <p>glovenbox</p> 
+                            <p>stored</p>                                                                                                             
 
+                            <button class="btn btn-small btn-modal" data-car="1" data-car-nema="Jan ">Spravovat</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
             <!-- HRÁČI -->
             <section id="players" class="hero reveal hidden">
                 <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
