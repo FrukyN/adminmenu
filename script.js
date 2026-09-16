@@ -138,6 +138,45 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- EKONOMIKA: ÚPRAVA FINANCÍ HRÁČE ---
+    const btnEcoAdd = document.getElementById('btnEcoAdd');
+    const btnEcoRemove = document.getElementById('btnEcoRemove');
+    const ecoPlayerId = document.getElementById('ecoPlayerId');
+    const ecoAmount = document.getElementById('ecoAmount');
+    const ecoAccountType = document.getElementById('ecoAccountType');
+
+    const handleEcoAction = (mode) => {
+        const targetId = ecoPlayerId?.value.trim();
+        const amount = Number(ecoAmount?.value);
+
+        if (!targetId) return;
+        if (!amount || amount <= 0) return;
+
+        sendNUI('executeAction', {
+            action: 'setPlayerMoney',
+            mode: mode, // 'add' nebo 'remove'
+            id: targetId,
+            amount: amount,
+            account: ecoAccountType?.value || 'cash'
+        });
+
+        if (ecoAmount) ecoAmount.value = '';
+    };
+
+    if (btnEcoAdd) btnEcoAdd.addEventListener('click', () => handleEcoAction('add'));
+    if (btnEcoRemove) btnEcoRemove.addEventListener('click', () => handleEcoAction('remove'));
+
+    // --- EKONOMIKA: VYHLEDÁVÁNÍ FIREM ---
+    const companySearchInput = document.getElementById('companySearchInput');
+    if (companySearchInput) {
+        companySearchInput.addEventListener('keyup', (e) => {
+            const filter = e.target.value.toLowerCase();
+            document.querySelectorAll('#companyList tr').forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+            });
+        });
+    }
+
     // --- FILTROVÁNÍ V LOGÁCH ---
     const logSearchInput = document.getElementById('logSearchInput');
     if (logSearchInput) {
