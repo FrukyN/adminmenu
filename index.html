@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="cs">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FR Admin Menu</title>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="app-container">
         <div class="bg-grid"></div>
 
         <header class="topbar">
-            <a href="#" class="logo">ADMINMENU</a>
+            <a href="#" class="logo">ADMIN MENU</a>
             <nav class="nav">
                 <a class="nav-item active" data-target="dashboard">Dashboard</a>
                 <a class="nav-item" data-target="players">Hráči</a>
-                <a class="nav-item" data-target="vozidla">Vozidla</a>
-                <a class="nav-item" data-target="economy">Ekonomika</a>
                 <a class="nav-item" data-target="bans">Bany</a>
+                <a class="nav-item" data-target="vozidla">Vozidla</a>
+                <a class="nav-item" data-target="frakce">Frakce</a>
+                <a class="nav-item" data-target="economy">Ekonomika</a>
                 <a class="nav-item" data-target="whitelist">Whitelist</a>
                 <a class="nav-item" data-target="tools">Nástroje</a>
                 <a class="nav-item" data-target="map">Mapa</a>
-                <a class="nav-item" data-target="reports"><span style="color: red;">[2]</span>Reporty</a>
+                <a class="nav-item" data-target="reports"><span style="color: red;">[2]</span> Reporty</a>
                 <a class="nav-item" data-target="chat">Chat</a>
                 <a class="nav-item" data-target="logs">Logy</a>
                 <a class="nav-item" data-target="settings">Nastavení</a>
+                <div class="admin-duty">
+                    <label class="switch" for="checkbox">d
+                        <input type="checkbox" id="checkbox" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
                 <a class="nav-item" data-target="sadmin"><span style="color: var(--danger);">Správa adminů</span></a>
                 <a class="nav-item" data-target="logadmin"><span style="color: var(--danger);">Admin Log</span></a>
             </nav>
@@ -43,7 +52,7 @@
                 <div class="panel">
                     <div class="status-grid">
                         <div class="panel-status">
-                            <span class="k">Online i</span>
+                            <span class="k">Online</span>
                             <strong id="statOnlinePlayers">24 / 64</strong>
                         </div>
                         <div class="panel-status">
@@ -82,49 +91,11 @@
                 </div>
             </section>
 
-        <!-- Vozidla -->
-            <section id="vozidla" class="hero reveal hidden">
-                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
-                <h1>Správa vozidel</h1>
-                
-                <div class="panel">
-                    <div class="section-row">
-                        <input type="text" id="searchInput" class="input-search" placeholder="id,plate,vin,owner,model"> Filter:
-                        <select id="searchType" class="input-search2">
-                            <option value="admin">filtr</option>
-                            <option value="admin">filtr</option>
-                            <option value="whitelist">filtr</option>
-                            <option value="note">filtr</option>
-                            <option value="ban">filtr</option>
-                        </select>
-                    </div>
-                    
-                    <div class="cards" id="playerList">
-                        <div class="card">
-                            <h3>model</h3>
-                            <p>id</p>                                                        
-                            <p>plate</p>                                                        
-                            <p>vin</p>                                                        
-                            <p>owner</p>                                                        
-                            <p>group</p> 
-                            <p>model</p>                                                        
-                            <p>class</p>                                                        
-                            <p>data</p>                                                        
-                            <p>trunk</p>                                                        
-                            <p>glovenbox</p> 
-                            <p>stored</p>                                                                                                             
-
-                            <button class="btn btn-small btn-modal" data-car="1" data-car-nema="nejakej-model">Spravovat</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
             <!-- HRÁČI -->
             <section id="players" class="hero reveal hidden">
                 <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
                 <h1>Správa hráčů</h1>
-                
+
                 <div class="panel">
                     <div class="status-grid">
                         <div class="panel-status">
@@ -144,9 +115,10 @@
 
                 <div class="panel">
                     <div class="section-row">
-                        <input type="text" id="searchInput" class="input-search" placeholder="userId, username, license2, steam, fivem, discord"> Filter:
+                        <input type="text" id="searchInput" class="input-search"
+                            placeholder="userId, username, license2, steam, fivem, discord"> Filter:
                         <select id="searchType" class="input-search2">
-                            <option value="admin">Žádný admin</option>
+                            <option value="admin">Žádný filtr</option>
                             <option value="admin">Je admin</option>
                             <option value="whitelist">Má whitelist</option>
                             <option value="note">Má o sobě poznámku </option>
@@ -154,35 +126,234 @@
                         </select>
                         <label class="checkbox">
                             <input type="checkbox" id="searchOffline">
-                            <span class="checkmark"></span>
-                            Zobrazit jen online hráče
+                            <span class="checkmark">Zobrazit jen online hráče</span>
+                            
                         </label>
                     </div>
-                    
+
                     <div class="cards" id="playerList">
                         <div class="card">
-                            <h3>[15] Jan Novák</h3>
-                            <p>Group: <span class="text-accent">user</span></p>
-                            <p>charid</p>                                                        
-                            <p>userid</p>                                                        
-                            <p>stateid</p>                                                        
-                            <p>phonenumber</p>                                                        
-                            <p>statuses</p>                                                        
-                            <p>username</p>                                                        
-                            <p>license2</p>                                                        
-                            <p>steam</p>                                                        
-                            <p>fivem</p>                                                        
-                            <p>discord</p>              
-                            <p>license: </p>                                                        
-                                          
-
-                            <button class="btn btn-small btn-modal" data-player="15" data-name="Jan Novák">Spravovat Hráče</button>
+                            <h3>[15] FrukyN</h3>
+                            <p>Jméno: Karel Cigan</p>
+                            <p>Group: Police</p>
+                            <button class="btn btn-small btn-modal" data-player="15" data-name="">Spravovat Hráče</button>
                         </div>
                         <div class="card">
-                            <h3>[Offline] Troll Jméno</h3>
-                            <p>Group: <span class="text-accent">user</span></p>
-                            <p>Job: unemployed</p>
-                            <button class="btn btn-small2 btn-modal" data-player="offline" data-name="Troll Jméno">Offline Správa</button>
+                            <h3>[Offline] Karol01</h3>
+                            <p>Jméno: Marek Podnikatel</p>
+                            <p>Group: unemployed</p>
+                            <button class="btn btn-small2 btn-modal" data-player="offline"
+                                data-name="Troll Jméno">Offline Správa</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BANY & WARNY -->
+            <section id="bans" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Bany & Varování</h1>
+                <p class="lead">Správa aktivních banů, varování a rychlé udělení nového banu.</p>
+
+                <div class="panel">
+                    <div class="status-grid">
+                        <div class="panel-status">
+                            <span class="k">Aktivní bany</span>
+                            <strong id="statActiveBans">14</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Aktivní varování</span>
+                            <strong id="statActiveWarns">6</strong>
+                        </div>
+                        <div class="panel-status">
+                            <span class="k">Bany za posledních 24h</span>
+                            <strong id="statBans24h">2</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Nový ban</h3>
+                    </div>
+                    <div class="tools-grid" style="grid-template-columns: repeat(4, minmax(0,1fr));">
+                        <div class="form-group">
+                            <label for="banPlayerId">ID / Identifikátor hráče</label>
+                            <input type="text" id="banPlayerId" placeholder="např. 15 nebo license:...">
+                        </div>
+                        <div class="form-group">
+                            <label for="banReason">Důvod</label>
+                            <input type="text" id="banReason" placeholder="Cheating, RDM...">
+                        </div>
+                        <div class="form-group">
+                            <label for="banDuration">Délka</label>
+                            <select id="banDuration">
+                                <option value="1h">1 hodina</option>
+                                <option value="1d">1 den</option>
+                                <option value="7d">7 dní</option>
+                                <option value="30d">30 dní</option>
+                                <option value="perm">Permanentní</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-small btn-danger" id="btnQuickBan">Banovat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Aktivní bany</h3>
+                        <input type="text" class="input-search" id="banSearchInput"
+                            placeholder="Hledat podle jména nebo identifikátoru...">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hráč</th>
+                                    <th>Identifikátor</th>
+                                    <th>Důvod</th>
+                                    <th>Uděleno</th>
+                                    <th>Vyprší</th>
+                                    <th>Admin</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody id="banList">
+                                <tr>
+                                    <td><strong>xNoScope_Petr</strong></td>
+                                    <td><code>license:9f11c02...</code></td>
+                                    <td>Cheating (aimbot)</td>
+                                    <td>Dnes, 10:12</td>
+                                    <td><span class="badge badge-danger">Permanentní</span></td>
+                                    <td>Karlos</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="unbanPlayer"
+                                            data-id="9f11c02">Odbanovat</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tomáš Bureš</strong></td>
+                                    <td><code>license:33ab910...</code></td>
+                                    <td>RDM opakovaně</td>
+                                    <td>Včera, 21:04</td>
+                                    <td><span class="badge badge-warning">Za 6 dní</span></td>
+                                    <td>David_Mod</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small" data-action="unbanPlayer"
+                                            data-id="33ab910">Odbanovat</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <h3>Aktivní varování</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hráč</th>
+                                    <th>Důvod</th>
+                                    <th>Počet varování</th>
+                                    <th>Uděleno</th>
+                                    <th>Admin</th>
+                                    <th style="text-align: right;">Akce</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warnList">
+                                <tr>
+                                    <td><strong>[15] Jan Novák</strong></td>
+                                    <td>Nevhodné RP jednání</td>
+                                    <td><span class="badge badge-warning">2 / 3</span></td>
+                                    <td>Dnes, 09:40</td>
+                                    <td>David_Mod</td>
+                                    <td class="table-actions">
+                                        <button class="btn btn-small btn-danger" data-action="clearWarn"
+                                            data-id="15">Zrušit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="k" style="margin-top: 0.6rem;">Při dosažení 3 varování je hráč automaticky navržen k
+                        dočasnému banu.</p>
+                </div>
+            </section>
+
+            <!-- Vozidla -->
+            <section id="vozidla" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Správa vozidel</h1>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" id="searchInput" class="input-search" placeholder="id,plate,vin,owner,model">
+                        Filter:
+                        <select id="searchType" class="input-search2">
+                            <option value="admin">filtr</option>
+                            <option value="admin">filtr</option>
+                            <option value="whitelist">filtr</option>
+                            <option value="note">filtr</option>
+                            <option value="ban">filtr</option>
+                        </select>
+                    </div>
+
+                    <div class="cards" id="playerList">
+                        <div class="card">
+                            <h3>model</h3>
+                            <p>id</p>
+                            <p>plate</p>
+                            <p>vin</p>
+                            <p>owner</p>
+                            <p>group</p>
+                            <p>model</p>
+                            <p>class</p>
+                            <p>data</p>
+                            <p>trunk</p>
+                            <p>glovenbox</p>
+                            <p>stored</p>
+
+                            <button class="btn btn-small btn-modal" data-car="1"
+                                data-car-nema="nejakej-model">Spravovat</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- frakce -->
+            <section id="frakce" class="hero reveal hidden">
+                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
+                <h1>Správa frakcí</h1>
+
+                <div class="panel">
+                    <div class="section-row">
+                        <input type="text" id="searchInput" class="input-search" placeholder="id,plate,vin,owner,model">
+                        Filter:
+                        <select id="searchType" class="input-search2">
+                            <option value="admin">filtr</option>
+                            <option value="admin">filtr</option>
+                            <option value="whitelist">filtr</option>
+                            <option value="note">filtr</option>
+                            <option value="ban">filtr</option>
+                        </select>
+                    </div>
+
+                    <div class="cards" id="playerList">
+                        <div class="card">
+                            <h3>frakce label</h3>
+                            <p>type</p>
+                            <p>hasaccout</p>
+                            <p>penizky</p>
+
+                            <button class="btn btn-small btn-modal" data-frakce="1"
+                                data-frakce-nema="nejakej-frakce">Spravovat</button>
                         </div>
                     </div>
                 </div>
@@ -265,8 +436,10 @@
                                     <td><span class="text-success">$1,240,500</span></td>
                                     <td>18</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="lspd">Upravit</button>
-                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="lspd">Log</button>
+                                        <button class="btn btn-small" data-action="editCompanyBalance"
+                                            data-id="lspd">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog"
+                                            data-id="lspd">Log</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -275,8 +448,10 @@
                                     <td><span class="text-success">$84,320</span></td>
                                     <td>4</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="burgershot">Upravit</button>
-                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="burgershot">Log</button>
+                                        <button class="btn btn-small" data-action="editCompanyBalance"
+                                            data-id="burgershot">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog"
+                                            data-id="burgershot">Log</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -285,8 +460,10 @@
                                     <td><span class="text-danger">-$12,050</span></td>
                                     <td>2</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="editCompanyBalance" data-id="bennys">Upravit</button>
-                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog" data-id="bennys">Log</button>
+                                        <button class="btn btn-small" data-action="editCompanyBalance"
+                                            data-id="bennys">Upravit</button>
+                                        <button class="btn btn-small btn-ghost" data-action="viewCompanyLog"
+                                            data-id="bennys">Log</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -302,154 +479,26 @@
                         <div class="log-entry">
                             <span class="log-time">12:21:03</span>
                             <span class="badge badge-success">VKLAD</span>
-                            <span class="log-text">Hráč <strong>[15] Jan Novák</strong> vložil <strong>$5,000</strong> na bankovní účet</span>
+                            <span class="log-text">Hráč <strong>[15] Jan Novák</strong> vložil <strong>$5,000</strong>
+                                na bankovní účet</span>
                         </div>
                         <div class="log-entry">
                             <span class="log-time">12:19:47</span>
                             <span class="badge badge-danger">VÝBĚR</span>
-                            <span class="log-text">Hráč <strong>[8] Pavel S.</strong> vybral <strong>$1,200</strong> hotovosti</span>
+                            <span class="log-text">Hráč <strong>[8] Pavel S.</strong> vybral <strong>$1,200</strong>
+                                hotovosti</span>
                         </div>
                         <div class="log-entry">
                             <span class="log-time">12:17:42</span>
                             <span class="badge badge-accent">FIRMA</span>
-                            <span class="log-text">Společnost <strong>'Burger Shot'</strong> vyplatila výplaty zaměstnancům, celkem <strong>$3,400</strong></span>
+                            <span class="log-text">Společnost <strong>'Burger Shot'</strong> vyplatila výplaty
+                                zaměstnancům, celkem <strong>$3,400</strong></span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- BANY & WARNY -->
-            <section id="bans" class="hero reveal hidden">
-                <div class="tag">Přihlášen jako: Frukyn, Majitel </div>
-                <h1>Bany & Varování</h1>
-                <p class="lead">Správa aktivních banů, varování a rychlé udělení nového banu.</p>
 
-                <div class="panel">
-                    <div class="status-grid">
-                        <div class="panel-status">
-                            <span class="k">Aktivní bany</span>
-                            <strong id="statActiveBans">14</strong>
-                        </div>
-                        <div class="panel-status">
-                            <span class="k">Aktivní varování</span>
-                            <strong id="statActiveWarns">6</strong>
-                        </div>
-                        <div class="panel-status">
-                            <span class="k">Bany za posledních 24h</span>
-                            <strong id="statBans24h">2</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="section-row">
-                        <h3>Nový ban</h3>
-                    </div>
-                    <div class="tools-grid" style="grid-template-columns: repeat(4, minmax(0,1fr));">
-                        <div class="form-group">
-                            <label for="banPlayerId">ID / Identifikátor hráče</label>
-                            <input type="text" id="banPlayerId" placeholder="např. 15 nebo license:...">
-                        </div>
-                        <div class="form-group">
-                            <label for="banReason">Důvod</label>
-                            <input type="text" id="banReason" placeholder="Cheating, RDM...">
-                        </div>
-                        <div class="form-group">
-                            <label for="banDuration">Délka</label>
-                            <select id="banDuration">
-                                <option value="1h">1 hodina</option>
-                                <option value="1d">1 den</option>
-                                <option value="7d">7 dní</option>
-                                <option value="30d">30 dní</option>
-                                <option value="perm">Permanentní</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-small btn-danger" id="btnQuickBan">Banovat</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="section-row">
-                        <h3>Aktivní bany</h3>
-                        <input type="text" class="input-search" id="banSearchInput" placeholder="Hledat podle jména nebo identifikátoru...">
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Hráč</th>
-                                    <th>Identifikátor</th>
-                                    <th>Důvod</th>
-                                    <th>Uděleno</th>
-                                    <th>Vyprší</th>
-                                    <th>Admin</th>
-                                    <th style="text-align: right;">Akce</th>
-                                </tr>
-                            </thead>
-                            <tbody id="banList">
-                                <tr>
-                                    <td><strong>xNoScope_Petr</strong></td>
-                                    <td><code>license:9f11c02...</code></td>
-                                    <td>Cheating (aimbot)</td>
-                                    <td>Dnes, 10:12</td>
-                                    <td><span class="badge badge-danger">Permanentní</span></td>
-                                    <td>Karlos</td>
-                                    <td class="table-actions">
-                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="9f11c02">Odbanovat</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Tomáš Bureš</strong></td>
-                                    <td><code>license:33ab910...</code></td>
-                                    <td>RDM opakovaně</td>
-                                    <td>Včera, 21:04</td>
-                                    <td><span class="badge badge-warning">Za 6 dní</span></td>
-                                    <td>David_Mod</td>
-                                    <td class="table-actions">
-                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="33ab910">Odbanovat</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="section-row">
-                        <h3>Aktivní varování</h3>
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Hráč</th>
-                                    <th>Důvod</th>
-                                    <th>Počet varování</th>
-                                    <th>Uděleno</th>
-                                    <th>Admin</th>
-                                    <th style="text-align: right;">Akce</th>
-                                </tr>
-                            </thead>
-                            <tbody id="warnList">
-                                <tr>
-                                    <td><strong>[15] Jan Novák</strong></td>
-                                    <td>Nevhodné RP jednání</td>
-                                    <td><span class="badge badge-warning">2 / 3</span></td>
-                                    <td>Dnes, 09:40</td>
-                                    <td>David_Mod</td>
-                                    <td class="table-actions">
-                                        <button class="btn btn-small btn-danger" data-action="clearWarn" data-id="15">Zrušit</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p class="k" style="margin-top: 0.6rem;">Při dosažení 3 varování je hráč automaticky navržen k dočasnému banu.</p>
-                </div>
-            </section>
 
             <!-- WHITELIST -->
             <section id="whitelist" class="hero reveal hidden">
@@ -459,7 +508,8 @@
 
                 <div class="panel">
                     <div class="section-row">
-                        <input type="text" class="input-search" placeholder="Hledat žadatele (Discord tag, Steam HEX)...">
+                        <input type="text" class="input-search"
+                            placeholder="Hledat žadatele (Discord tag, Steam HEX)...">
                         <span class="badge badge-accent">Čeká na schválení: 2</span>
                     </div>
 
@@ -526,7 +576,8 @@
                             <button class="btn btn-small btn-tool" data-action="repairVeh">Opravit a vyčistit</button>
                             <button class="btn btn-small btn-tool" data-action="refuelVeh">Dotankovat (100%)</button>
                             <button class="btn btn-small btn-tool" data-action="maxTuneVeh">Max Tuning</button>
-                            <button class="btn btn-small btn-tool btn-danger" data-action="deleteVeh">Smazat vozidlo</button>
+                            <button class="btn btn-small btn-tool btn-danger" data-action="deleteVeh">Smazat
+                                vozidlo</button>
                         </div>
                     </div>
 
@@ -545,10 +596,13 @@
                         <h3>Svět & Synchronizace</h3>
                         <p>Globální nastavení světa pro všechny.</p>
                         <div class="tools-btn-group">
-                            <button class="btn btn-small btn-tool" data-action="wipeVehicles">Smazat opuštěná auta</button>
+                            <button class="btn btn-small btn-tool" data-action="wipeVehicles">Smazat opuštěná
+                                auta</button>
                             <button class="btn btn-small btn-tool" data-action="wipePeds">Smazat NPC</button>
-                            <button class="btn btn-small btn-tool" data-action="setTimeNoon">Nastavit čas: 12:00</button>
-                            <button class="btn btn-small btn-tool" data-action="setTimeNight">Nastavit čas: 00:00</button>
+                            <button class="btn btn-small btn-tool" data-action="setTimeNoon">Nastavit čas:
+                                12:00</button>
+                            <button class="btn btn-small btn-tool" data-action="setTimeNight">Nastavit čas:
+                                00:00</button>
                         </div>
                     </div>
                 </div>
@@ -562,9 +616,12 @@
 
                 <div class="panel">
                     <div class="map-wrap" id="mapCanvas">
-                        <div class="map-blip player" style="top: 42%; left: 38%;" data-player="15" data-name="Jan Novák" title="[15] Jan Novák"></div>
-                        <div class="map-blip player" style="top: 61%; left: 55%;" data-player="8" data-name="Pavel S." title="[8] Pavel S."></div>
-                        <div class="map-blip player" style="top: 30%; left: 70%;" data-player="21" data-name="Martin Procházka" title="[21] Martin Procházka"></div>
+                        <div class="map-blip player" style="top: 42%; left: 38%;" data-player="15" data-name="Jan Novák"
+                            title="[15] Jan Novák"></div>
+                        <div class="map-blip player" style="top: 61%; left: 55%;" data-player="8" data-name="Pavel S."
+                            title="[8] Pavel S."></div>
+                        <div class="map-blip player" style="top: 30%; left: 70%;" data-player="21"
+                            data-name="Martin Procházka" title="[21] Martin Procházka"></div>
                         <div class="map-blip admin" style="top: 50%; left: 48%;" title="Admin: Karlos"></div>
                         <div class="map-blip report" style="top: 47%; left: 40%;" title="Report #1042 - RDM"></div>
                     </div>
@@ -578,7 +635,8 @@
                 <div class="panel">
                     <div class="section-row">
                         <h3>Online hráči</h3>
-                        <input type="text" class="input-search" id="mapPlayerSearch" placeholder="Hledat hráče na mapě...">
+                        <input type="text" class="input-search" id="mapPlayerSearch"
+                            placeholder="Hledat hráče na mapě...">
                     </div>
                     <div class="table-container">
                         <table class="data-table" id="mapPlayerTable">
@@ -596,7 +654,8 @@
                                     <td><code>-215.4, -890.1, 30.2</code></td>
                                     <td>Nemocnice Pillbox</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="15">Přejít</button>
+                                        <button class="btn btn-small" data-action="gotoReportPlayer"
+                                            data-id="15">Přejít</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -604,7 +663,8 @@
                                     <td><code>120.8, -1280.5, 29.0</code></td>
                                     <td>Legion Square</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít</button>
+                                        <button class="btn btn-small" data-action="gotoReportPlayer"
+                                            data-id="8">Přejít</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -612,7 +672,8 @@
                                     <td><code>2440.1, 4990.8, 38.0</code></td>
                                     <td>Sandy Shores</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="gotoReportPlayer" data-id="21">Přejít</button>
+                                        <button class="btn btn-small" data-action="gotoReportPlayer"
+                                            data-id="21">Přejít</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -637,10 +698,14 @@
                                     <p class="report-meta">Hráč: <strong>Pavel S. (ID: 8)</strong> | Před 3 minutami</p>
                                 </div>
                                 <div class="report-actions">
-                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít k hráči</button>
-                                    <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1042">Otevřít Chat</button>
-                                    <button class="btn btn-small2" data-action="gotoReportLocation" data-id="1042">Převzít</button>
-                                    <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1042">Uzavřít</button>
+                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="8">Přejít k
+                                        hráči</button>
+                                    <button class="btn btn-small btn-ghost" data-action="openReportChat"
+                                        data-id="1042">Otevřít Chat</button>
+                                    <button class="btn btn-small2" data-action="gotoReportLocation"
+                                        data-id="1042">Převzít</button>
+                                    <button class="btn btn-small btn-danger" data-action="closeReport"
+                                        data-id="1042">Uzavřít</button>
                                 </div>
                             </div>
                         </div>
@@ -650,13 +715,18 @@
                                 <div>
                                     <span class="badge badge-warning">#1041 - Zaseknuté vozidlo</span>
                                     <h3 style="margin-top: 0.3rem;">Propůjčil jsem se pod texturu u tunelu</h3>
-                                    <p class="report-meta">Hráč: <strong>Marek K. (ID: 19)</strong> | Před 9 minutami</p>
+                                    <p class="report-meta">Hráč: <strong>Marek K. (ID: 19)</strong> | Před 9 minutami
+                                    </p>
                                 </div>
                                 <div class="report-actions">
-                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="19">Přejít k hráči</button>
-                                    <button class="btn btn-small btn-ghost" data-action="openReportChat" data-id="1041">Otevřít Chat</button>
-                                    <button class="btn btn-small2" data-action="gotoReportLocation" data-id="1042">Převzít</button>
-                                    <button class="btn btn-small btn-danger" data-action="closeReport" data-id="1041">Uzavřít</button>
+                                    <button class="btn btn-small" data-action="gotoReportPlayer" data-id="19">Přejít k
+                                        hráči</button>
+                                    <button class="btn btn-small btn-ghost" data-action="openReportChat"
+                                        data-id="1041">Otevřít Chat</button>
+                                    <button class="btn btn-small2" data-action="gotoReportLocation"
+                                        data-id="1042">Převzít</button>
+                                    <button class="btn btn-small btn-danger" data-action="closeReport"
+                                        data-id="1041">Uzavřít</button>
                                 </div>
                             </div>
                         </div>
@@ -675,15 +745,18 @@
                         <div class="chat-channels">
                         </div>
                         <div class="actions" style="margin: 0;">
-                            <button class="btn btn-small btn-danger" data-action="clearServerChat">Vyčistit chat pro všechny</button>
+                            <button class="btn btn-small btn-danger" data-action="clearServerChat">Vyčistit chat pro
+                                všechny</button>
                         </div>
                     </div>
 
                     <div class="chat-container" style="height: 380px;">
                         <div class="chat-messages" id="adminStaffChat">
                             <div class="msg system">Vítej v zabezpečeném admin chatu. Zprávy jsou logovány.</div>
-                            <div class="msg admin"><strong>[Admin] Lukas:</strong> Máme na náměstí hlášený VDM, může se na to někdo podívat?</div>
-                            <div class="msg admin"><strong>[Mod] Honza:</strong> Jedu tam v neviditelnosti, beru to.</div>
+                            <div class="msg admin"><strong>[Admin] Lukas:</strong> Máme na náměstí hlášený VDM, může se
+                                na to někdo podívat?</div>
+                            <div class="msg admin"><strong>[Mod] Honza:</strong> Jedu tam v neviditelnosti, beru to.
+                            </div>
                             <div class="msg player"><strong>[Já]:</strong> dasdjkasd hjasdkjhahjksd</div>
                         </div>
                         <div class="chat-input-area">
@@ -702,7 +775,8 @@
 
                 <div class="panel">
                     <div class="section-row">
-                        <input type="text" class="input-search" id="logSearchInput" placeholder="Filtrovat log (ID, jméno, zbraň, částka)...">
+                        <input type="text" class="input-search" id="logSearchInput"
+                            placeholder="Filtrovat log (ID, jméno, zbraň, částka)...">
                         <select id="logCategoryFilter" style="max-width: 220px;">
                             <option value="all">Všechny kategorie</option>
                             <option value="kills">Zabití (Kills)</option>
@@ -716,22 +790,26 @@
                         <div class="log-entry log-kill">
                             <span class="log-time">12:18:04</span>
                             <span class="badge badge-danger">KILL</span>
-                            <span class="log-text"><strong>[12] Jan Novak</strong> zabil hráče <strong>[4] Petr Svoboda</strong> zbraní <code>WEAPON_PISTOL</code></span>
+                            <span class="log-text"><strong>[12] Jan Novak</strong> zabil hráče <strong>[4] Petr
+                                    Svoboda</strong> zbraní <code>WEAPON_PISTOL</code></span>
                         </div>
                         <div class="log-entry log-money">
                             <span class="log-time">12:17:42</span>
                             <span class="badge badge-accent">MONEY</span>
-                            <span class="log-text">Společnost <strong>'police'</strong> převedla <strong>$25,000</strong> na bankovní účet <strong>ID: 15</strong></span>
+                            <span class="log-text">Společnost <strong>'police'</strong> převedla
+                                <strong>$25,000</strong> na bankovní účet <strong>ID: 15</strong></span>
                         </div>
                         <div class="log-entry log-conn">
                             <span class="log-time">12:15:10</span>
                             <span class="badge badge-success">CONNECT</span>
-                            <span class="log-text">Hráč <strong>Martin Procházka</strong> se připojil (ID: 21 | steam:1100001...)</span>
+                            <span class="log-text">Hráč <strong>Martin Procházka</strong> se připojil (ID: 21 |
+                                steam:1100001...)</span>
                         </div>
                         <div class="log-entry log-item">
                             <span class="log-time">12:10:02</span>
                             <span class="badge badge-warning">ITEM</span>
-                            <span class="log-text">Hráč <strong>[3] Tomas_K</strong> vložil <code>5x repairkit</code> do kufru vozidla <code>ABC 1234</code></span>
+                            <span class="log-text">Hráč <strong>[3] Tomas_K</strong> vložil <code>5x repairkit</code> do
+                                kufru vozidla <code>ABC 1234</code></span>
                         </div>
                     </div>
                 </div>
@@ -877,7 +955,8 @@
                                     <td><code>license:12f77bc1...</code></td>
                                     <td><span class="badge badge-warning">Trial Admin</span></td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small btn-edit-permissions" data-admin="David_Mod">Upravit Práva</button>
+                                        <button class="btn btn-small btn-edit-permissions"
+                                            data-admin="David_Mod">Upravit Práva</button>
                                         <button class="btn btn-small btn-danger">Odebrat</button>
                                     </td>
                                 </tr>
@@ -934,17 +1013,20 @@
                         <div class="log-entry">
                             <span class="log-time">12:16:50</span>
                             <span class="badge badge-danger">AUDIT</span>
-                            <span class="log-text">Admin <strong>Karlos</strong> provedl <strong>Area Wipe</strong> v okruhu 150m</span>
+                            <span class="log-text">Admin <strong>Karlos</strong> provedl <strong>Area Wipe</strong> v
+                                okruhu 150m</span>
                         </div>
                         <div class="log-entry">
                             <span class="log-time">12:05:12</span>
                             <span class="badge badge-danger">AUDIT</span>
-                            <span class="log-text">Admin <strong>David_Mod</strong> použil příkaz <strong>/revive</strong> na hráče <strong>Jan Novák [15]</strong></span>
+                            <span class="log-text">Admin <strong>David_Mod</strong> použil příkaz
+                                <strong>/revive</strong> na hráče <strong>Jan Novák [15]</strong></span>
                         </div>
                         <div class="log-entry">
                             <span class="log-time">11:42:00</span>
                             <span class="badge badge-danger">AUDIT</span>
-                            <span class="log-text">Admin <strong>Karlos</strong> změnil skupinu hráče <strong>Martin Procházka [21]</strong> na <code>vip</code></span>
+                            <span class="log-text">Admin <strong>Karlos</strong> změnil skupinu hráče <strong>Martin
+                                    Procházka [21]</strong> na <code>vip</code></span>
                         </div>
                     </div>
                 </div>
@@ -964,15 +1046,46 @@
                 <button class="btn btn-small" data-action="gotoPlayer">Teleportovat k hráči</button>
                 <button class="btn btn-small" data-action="bringPlayer">Přitáhnout k sobě</button>
                 <button class="btn btn-small" data-action="spectatePlayer">Spectate</button>
-                <button class="btn btn-small btn-ghost" data-action="screenshotPlayer">Vyžádat Screenshot</button>
+                <button class="btn btn-small" data-action="screenshotPlayer">Vyžádat Screenshot</button>
                 <button class="btn btn-small" id="btnFreezePlayer" data-frozen="false">Zamknout (Freeze)</button>
                 <button class="btn btn-small btn-danger" id="btnLogout">Odhlásit (Kick)</button>
+            </div>
+
+            <div class="status-grid">
+                <div class="panel-status">
+                    <span class="k">Session Time</span>
+                    <strong id="statOnlinePlayers">24min</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Play Time</span>
+                    <strong id="statActiveAdmins">2h</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Join Date</span>
+                    <strong class="text-danger">3.3.2001</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Má wl</span>
+                    <strong class="text-danger" id="statPendingReports">ne</strong>
+                </div>
             </div>
 
             <div class="card" style="margin-top: 1.2rem;">
                 <h3>Identifikátory</h3>
                 <div class="text-block" id="modalIdentifiers">
                     <p>Steam: <code>steam:11000010a1b2c3</code></p>
+                                                <p>Group: <span class="text-accent">user</span></p>
+                            <p>charid</p>
+                            <p>userid</p>
+                            <p>stateid</p>
+                            <p>phonenumber</p>
+                            <p>statuses</p>
+                            <p>username</p>
+                            <p>license2</p>
+                            <p>steam</p>
+                            <p>fivem</p>
+                            <p>discord</p>
+                            <p>license: </p>
                     <p>License: <code>license:98c21a44f...</code></p>
                     <p>Discord: <code>discord:441022...</code></p>
                     <p>IP: <code>89.24.xx.xx</code></p>
@@ -982,7 +1095,8 @@
 
             <div class="card" style="margin-top: 0.9rem;">
                 <h3>Poznámka správce</h3>
-                <textarea id="staffNoteInput" rows="3" placeholder="Interní poznámka viditelná pro všechny adminy..."></textarea>
+                <textarea id="staffNoteInput" rows="3"
+                    placeholder="Interní poznámka viditelná pro všechny adminy..."></textarea>
                 <button class="btn btn-small" id="btnSaveNote" style="margin-top: 0.6rem;">Uložit poznámku</button>
             </div>
 
@@ -991,7 +1105,8 @@
                 <div class="report-list" id="warnsList">
                     <div class="log-entry">
                         <span class="badge badge-warning">1/3</span>
-                        <span class="log-text">Nevhodné RP jednání — uděleno <strong>David_Mod</strong>, dnes 09:40</span>
+                        <span class="log-text">Nevhodné RP jednání — uděleno <strong>David_Mod</strong>, dnes
+                            09:40</span>
                     </div>
                 </div>
                 <div class="section-row" style="margin-top: 0.8rem; margin-bottom: 0;">
@@ -1034,14 +1149,17 @@
             <p class="lead" style="margin-top: 0.4rem;">Zvol, jaké akce může tento admin ve menu provádět.</p>
 
             <div class="permissions-grid">
-                <label class="permission-item"><input type="checkbox" data-perm="players" checked> Správa hráčů (heal, tp, kick)</label>
+                <label class="permission-item"><input type="checkbox" data-perm="players" checked> Správa hráčů (heal,
+                    tp, kick)</label>
                 <label class="permission-item"><input type="checkbox" data-perm="ban"> Bany a varování</label>
                 <label class="permission-item"><input type="checkbox" data-perm="economy"> Ekonomika</label>
                 <label class="permission-item"><input type="checkbox" data-perm="vehicles" checked> Vozidla</label>
                 <label class="permission-item"><input type="checkbox" data-perm="whitelist"> Whitelist</label>
                 <label class="permission-item"><input type="checkbox" data-perm="chat" checked> Moderace chatu</label>
-                <label class="permission-item"><input type="checkbox" data-perm="server"> Server (restart, vypnutí)</label>
-                <label class="permission-item"><input type="checkbox" data-perm="staffmanage"> Správa administrátorů</label>
+                <label class="permission-item"><input type="checkbox" data-perm="server"> Server (restart,
+                    vypnutí)</label>
+                <label class="permission-item"><input type="checkbox" data-perm="staffmanage"> Správa
+                    administrátorů</label>
             </div>
 
             <button class="btn btn-small" id="btnSavePermissions" style="margin-top: 1.2rem;">Uložit oprávnění</button>
@@ -1049,9 +1167,10 @@
     </div>
 
     <footer class="footer">
-      <p>LEGACY RP &copy; <span id="year"></span> | Aktualizováno 15.09.2026</p>
+        <p>LEGACY RP &copy; <span id="year"></span> | Aktualizováno 15.09.2026</p>
     </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>
