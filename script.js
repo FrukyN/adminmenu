@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     visible = !text.includes('[offline]') && !text.includes('offline');
                 }
 
-                card.style.display = visible ? 'flex' : 'none';
+                card.style.display = visible ? '' : 'none';
             });
         };
 
