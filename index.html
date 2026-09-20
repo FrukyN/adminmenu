@@ -328,8 +328,10 @@
                             <p>VIN: 1FTAX1EF0...</p>
                             <p>Majitel: Karel Cigan [15]</p>
                             <p>Stav: <span class="badge badge-success">Zaparkované ve světě</span></p>
-                            <button class="btn btn-small btn-modal" data-plate="3ABC123"
-                                data-model="Karin Sultan Classic">Spravovat</button>
+                            <button class="btn btn-small btn-vehicle-modal" data-plate="3ABC123"
+                                data-model="Karin Sultan Classic" data-owner="Karel Cigan [15]" data-vin="1FTAX1EF0X9K48213"
+                                data-fuel="72" data-engine="94" data-body="88" data-status="Zaparkované ve světě"
+                                data-status-class="badge-success" data-locked="true" data-impounded="false">Spravovat</button>
                         </div>
                         <div class="card">
                             <h3>Vapid Police Cruiser</h3>
@@ -337,8 +339,10 @@
                             <p>VIN: 2GT4X9EF3...</p>
                             <p>Majitel: Frakce - Police</p>
                             <p>Stav: <span class="badge badge-accent">V garáži</span></p>
-                            <button class="btn btn-small btn-modal" data-plate="POLICE01"
-                                data-model="Vapid Police Cruiser">Spravovat</button>
+                            <button class="btn btn-small btn-vehicle-modal" data-plate="POLICE01"
+                                data-model="Vapid Police Cruiser" data-owner="Frakce - Police" data-vin="2GT4X9EF3H1177420"
+                                data-fuel="100" data-engine="100" data-body="100" data-status="V garáži"
+                                data-status-class="badge-accent" data-locked="true" data-impounded="false">Spravovat</button>
                         </div>
                         <div class="card">
                             <h3>Bravado Buffalo</h3>
@@ -346,8 +350,10 @@
                             <p>VIN: 9HT2M4KP1...</p>
                             <p>Majitel: Marek Podnikatel</p>
                             <p>Stav: <span class="badge badge-danger">V depu (nezaplaceno)</span></p>
-                            <button class="btn btn-small btn-modal" data-plate="7XKD991"
-                                data-model="Bravado Buffalo">Spravovat</button>
+                            <button class="btn btn-small btn-vehicle-modal" data-plate="7XKD991"
+                                data-model="Bravado Buffalo" data-owner="Marek Podnikatel" data-vin="9HT2M4KP1B5502391"
+                                data-fuel="18" data-engine="41" data-body="22" data-status="V depu (nezaplaceno)"
+                                data-status-class="badge-danger" data-locked="false" data-impounded="true">Spravovat</button>
                         </div>
                     </div>
                 </div>
@@ -378,8 +384,10 @@
                             <p>Bankovní účet: <span class="text-success">Aktivní</span></p>
                             <p>Zůstatek: $1,240,500</p>
                             <p>Členové: 18</p>
-                            <button class="btn btn-small btn-modal" data-faction="lspd"
-                                data-faction-label="Police Department (LSPD)">Spravovat</button>
+                            <button class="btn btn-small btn-frakce-modal" data-faction="lspd"
+                                data-faction-label="Police Department (LSPD)" data-type="Vládní"
+                                data-account="Aktivní" data-account-class="text-success" data-balance="1240500"
+                                data-members="18" data-boss="Karlos">Spravovat</button>
                         </div>
                         <div class="card">
                             <h3>EMS / Pillbox Hospital</h3>
@@ -387,8 +395,10 @@
                             <p>Bankovní účet: <span class="text-success">Aktivní</span></p>
                             <p>Zůstatek: $560,200</p>
                             <p>Členové: 9</p>
-                            <button class="btn btn-small btn-modal" data-faction="ems"
-                                data-faction-label="EMS / Pillbox Hospital">Spravovat</button>
+                            <button class="btn btn-small btn-frakce-modal" data-faction="ems"
+                                data-faction-label="EMS / Pillbox Hospital" data-type="Vládní"
+                                data-account="Aktivní" data-account-class="text-success" data-balance="560200"
+                                data-members="9" data-boss="Dr. Nováková">Spravovat</button>
                         </div>
                         <div class="card">
                             <h3>Bennys Motorworks</h3>
@@ -396,8 +406,10 @@
                             <p>Bankovní účet: <span class="text-danger">Neaktivní</span></p>
                             <p>Zůstatek: -$12,050</p>
                             <p>Členové: 2</p>
-                            <button class="btn btn-small btn-modal" data-faction="bennys"
-                                data-faction-label="Bennys Motorworks">Spravovat</button>
+                            <button class="btn btn-small btn-frakce-modal" data-faction="bennys"
+                                data-faction-label="Bennys Motorworks" data-type="Soukromá"
+                                data-account="Neaktivní" data-account-class="text-danger" data-balance="-12050"
+                                data-members="2" data-boss="Petr Malý">Spravovat</button>
                         </div>
                     </div>
                 </div>
@@ -1210,6 +1222,142 @@
                     administrátorů</label>
             </div>
             <button class="btn btn-small" id="btnSavePermissions" style="margin-top: 1.2rem;">Uložit oprávnění</button>
+        </div>
+    </div>
+
+    <!-- MODAL: SPRÁVA VOZIDLA -->
+    <div id="vehicleModal" class="modal">
+        <div class="modal-box modal-box-lg">
+            <button class="modal-close" id="closeVehicleModalBtn">✕</button>
+            <h2 id="modalVehicleTitle">Detail vozidla</h2>
+
+            <div class="actions" style="margin-top: 1rem;">
+                <button class="btn btn-small" data-action="gotoVehicle">Teleportovat k vozidlu</button>
+                <button class="btn btn-small" data-action="repairVehicleModal">Opravit a vyčistit</button>
+                <button class="btn btn-small" data-action="refuelVehicleModal">Dotankovat (100%)</button>
+                <button class="btn btn-small" id="btnToggleVehicleLock" data-locked="true">Odemknout dveře</button>
+                <button class="btn btn-small" id="btnToggleImpound" data-impounded="false">Zabavit do depa</button>
+                <button class="btn btn-small btn-danger" id="btnDeleteVehicleModal">Smazat vozidlo</button>
+            </div>
+
+            <div class="status-grid">
+                <div class="panel-status">
+                    <span class="k">Palivo</span>
+                    <strong id="modalVehicleFuel">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Stav motoru</span>
+                    <strong id="modalVehicleEngine">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Stav karoserie</span>
+                    <strong id="modalVehicleBody">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Stav</span>
+                    <strong id="modalVehicleStatus">–</strong>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.2rem;">
+                <h3>Identifikátory</h3>
+                <div class="text-block" id="modalVehicleIdentifiers">
+                    <p>SPZ: <code id="modalVehiclePlate">–</code></p>
+                    <p>VIN: <code id="modalVehicleVin">–</code></p>
+                    <p>Model: <span id="modalVehicleModel">–</span></p>
+                    <p>Majitel: <span id="modalVehicleOwner">–</span></p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Přepsat majitele</h3>
+                <div class="tools-grid" style="grid-template-columns: 2fr 1fr;">
+                    <div class="form-group">
+                        <label for="vehicleNewOwnerInput">Nový majitel (ID / jméno)</label>
+                        <input type="text" id="vehicleNewOwnerInput" placeholder="např. 15 nebo Karel Cigan">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-small" id="btnTransferVehicleOwner">Přepsat</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Poznámka správce</h3>
+                <textarea id="vehicleNoteInput" rows="3"
+                    placeholder="Interní poznámka k vozidlu viditelná pro všechny adminy..."></textarea>
+                <button class="btn btn-small" id="btnSaveVehicleNote" style="margin-top: 0.6rem;">Uložit
+                    poznámku</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SPRÁVA FRAKCE -->
+    <div id="frakceModal" class="modal">
+        <div class="modal-box modal-box-lg">
+            <button class="modal-close" id="closeFrakceModalBtn">✕</button>
+            <h2 id="modalFactionTitle">Detail frakce</h2>
+
+            <div class="actions" style="margin-top: 1rem;">
+                <button class="btn btn-small" data-action="openFactionStash">Otevřít frakční trezor</button>
+                <button class="btn btn-small" data-action="openFactionGarage">Otevřít frakční garáž</button>
+                <button class="btn btn-small" id="btnPayFactionSalaries">Vynutit výplaty</button>
+                <button class="btn btn-small btn-danger" id="btnDeleteFaction">Zrušit frakci</button>
+            </div>
+
+            <div class="status-grid">
+                <div class="panel-status">
+                    <span class="k">Typ</span>
+                    <strong id="modalFactionType">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Bankovní účet</span>
+                    <strong id="modalFactionAccount">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Zůstatek</span>
+                    <strong id="modalFactionBalance">–</strong>
+                </div>
+                <div class="panel-status">
+                    <span class="k">Počet členů</span>
+                    <strong id="modalFactionMembers">–</strong>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.2rem;">
+                <h3>Identifikátory</h3>
+                <div class="text-block">
+                    <p>ID frakce: <code id="modalFactionId">–</code></p>
+                    <p>Velitel / Boss: <span id="modalFactionBoss">–</span></p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Úprava zůstatku frakce</h3>
+                <div class="tools-grid" style="grid-template-columns: 2fr 1fr 1fr;">
+                    <div class="form-group">
+                        <label for="factionAmountInput">Částka</label>
+                        <input type="number" id="factionAmountInput" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-small" id="btnFactionAddFunds">Přidat</button>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-small btn-danger" id="btnFactionRemoveFunds">Odebrat</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Poznámka správce</h3>
+                <textarea id="factionNoteInput" rows="3"
+                    placeholder="Interní poznámka k frakci viditelná pro všechny adminy..."></textarea>
+                <button class="btn btn-small" id="btnSaveFactionNote" style="margin-top: 0.6rem;">Uložit
+                    poznámku</button>
+            </div>
         </div>
     </div>
 
