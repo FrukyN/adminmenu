@@ -146,6 +146,222 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- SPRÁVA VOZIDLA (MODAL) ---
+    let selectedVehiclePlate = null;
+    const vehicleModal = document.getElementById('vehicleModal');
+    const modalVehicleTitle = document.getElementById('modalVehicleTitle');
+    const closeVehicleModalBtn = document.getElementById('closeVehicleModalBtn');
+    const btnToggleVehicleLock = document.getElementById('btnToggleVehicleLock');
+    const btnToggleImpound = document.getElementById('btnToggleImpound');
+    const btnDeleteVehicleModal = document.getElementById('btnDeleteVehicleModal');
+    const btnTransferVehicleOwner = document.getElementById('btnTransferVehicleOwner');
+    const btnSaveVehicleNote = document.getElementById('btnSaveVehicleNote');
+
+    const openVehicleModal = (btn) => {
+        selectedVehiclePlate = btn.getAttribute('data-plate');
+        const model = btn.getAttribute('data-model') || 'Neznámý model';
+        const owner = btn.getAttribute('data-owner') || 'Neznámý majitel';
+        const vin = btn.getAttribute('data-vin') || '–';
+        const fuel = btn.getAttribute('data-fuel') || '–';
+        const engine = btn.getAttribute('data-engine') || '–';
+        const body = btn.getAttribute('data-body') || '–';
+        const status = btn.getAttribute('data-status') || '–';
+        const locked = btn.getAttribute('data-locked') === 'true';
+        const impounded = btn.getAttribute('data-impounded') === 'true';
+
+        if (modalVehicleTitle) modalVehicleTitle.innerText = `Vozidlo: ${model} (${selectedVehiclePlate})`;
+        document.getElementById('modalVehiclePlate').innerText = selectedVehiclePlate;
+        document.getElementById('modalVehicleVin').innerText = vin;
+        document.getElementById('modalVehicleModel').innerText = model;
+        document.getElementById('modalVehicleOwner').innerText = owner;
+        document.getElementById('modalVehicleFuel').innerText = `${fuel}%`;
+        document.getElementById('modalVehicleEngine').innerText = `${engine}%`;
+        document.getElementById('modalVehicleBody').innerText = `${body}%`;
+        document.getElementById('modalVehicleStatus').innerText = status;
+
+        if (btnToggleVehicleLock) {
+            btnToggleVehicleLock.setAttribute('data-locked', String(locked));
+            btnToggleVehicleLock.innerText = locked ? 'Odemknout dveře' : 'Zamknout dveře';
+        }
+        if (btnToggleImpound) {
+            btnToggleImpound.setAttribute('data-impounded', String(impounded));
+            btnToggleImpound.innerText = impounded ? 'Vydat z depa' : 'Zabavit do depa';
+        }
+
+        // Dynamicky nastavíme id vozidla na tlačítka rychlých akcí uvnitř modalu,
+        // aby je zachytil obecný handler pro button[data-action].
+        vehicleModal?.querySelectorAll('[data-action]').forEach(actionBtn => {
+            actionBtn.setAttribute('data-id', selectedVehiclePlate);
+        });
+
+        document.getElementById('vehicleNoteInput').value = '';
+        document.getElementById('vehicleNewOwnerInput').value = '';
+        vehicleModal?.classList.add('show');
+    };
+
+    document.querySelectorAll('.btn-vehicle-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => openVehicleModal(e.currentTarget));
+    });
+
+    closeVehicleModalBtn?.addEventListener('click', () => {
+        vehicleModal?.classList.remove('show');
+        selectedVehiclePlate = null;
+    });
+
+    btnToggleVehicleLock?.addEventListener('click', () => {
+        if (!selectedVehiclePlate) return;
+        const isLocked = btnToggleVehicleLock.getAttribute('data-locked') === 'true';
+        const newState = !isLocked;
+        btnToggleVehicleLock.setAttribute('data-locked', String(newState));
+        btnToggleVehicleLock.innerText = newState ? 'Odemknout dveře' : 'Zamknout dveře';
+        sendNUI('executeAction', { action: 'toggleVehicleLock', plate: selectedVehiclePlate, locked: newState });
+        showToast(newState ? 'Vozidlo bylo zamčeno.' : 'Vozidlo bylo odemčeno.', 'warning');
+    });
+
+    btnToggleImpound?.addEventListener('click', () => {
+        if (!selectedVehiclePlate) return;
+        const isImpounded = btnToggleImpound.getAttribute('data-impounded') === 'true';
+        const newState = !isImpounded;
+        btnToggleImpound.setAttribute('data-impounded', String(newState));
+        btnToggleImpound.innerText = newState ? 'Vydat z depa' : 'Zabavit do depa';
+        sendNUI('executeAction', { action: 'toggleVehicleImpound', plate: selectedVehiclePlate, impounded: newState });
+        showToast(newState ? 'Vozidlo bylo zabaveno do depa.' : 'Vozidlo bylo vydáno z depa.', newState ? 'danger' : 'success');
+    });
+
+    btnDeleteVehicleModal?.addEventListener('click', () => {
+        if (!selectedVehiclePlate) return;
+        if (!confirm('Opravdu chceš toto vozidlo trvale smazat? Tuto akci nelze vzít zpět.')) return;
+        sendNUI('executeAction', { action: 'deleteVehicle', plate: selectedVehiclePlate });
+        showToast(`Vozidlo ${selectedVehiclePlate} bylo smazáno.`, 'danger');
+        vehicleModal?.classList.remove('show');
+    });
+
+    btnTransferVehicleOwner?.addEventListener('click', () => {
+        const newOwner = document.getElementById('vehicleNewOwnerInput')?.value.trim();
+        if (!selectedVehiclePlate || !newOwner) {
+            showToast('Zadej nového majitele.', 'danger');
+            return;
+        }
+        sendNUI('executeAction', { action: 'transferVehicleOwner', plate: selectedVehiclePlate, newOwner });
+        document.getElementById('modalVehicleOwner').innerText = newOwner;
+        showToast(`Majitel vozidla byl změněn na ${newOwner}.`, 'success');
+        document.getElementById('vehicleNewOwnerInput').value = '';
+    });
+
+    btnSaveVehicleNote?.addEventListener('click', () => {
+        const note = document.getElementById('vehicleNoteInput')?.value.trim();
+        if (!selectedVehiclePlate || !note) {
+            showToast('Poznámka nemůže být prázdná.', 'danger');
+            return;
+        }
+        sendNUI('executeAction', { action: 'saveVehicleNote', plate: selectedVehiclePlate, note });
+        showToast('Poznámka k vozidlu byla uložena.', 'success');
+    });
+
+    // --- SPRÁVA FRAKCE (MODAL) ---
+    let selectedFactionId = null;
+    const frakceModal = document.getElementById('frakceModal');
+    const modalFactionTitle = document.getElementById('modalFactionTitle');
+    const closeFrakceModalBtn = document.getElementById('closeFrakceModalBtn');
+    const btnPayFactionSalaries = document.getElementById('btnPayFactionSalaries');
+    const btnDeleteFaction = document.getElementById('btnDeleteFaction');
+    const btnFactionAddFunds = document.getElementById('btnFactionAddFunds');
+    const btnFactionRemoveFunds = document.getElementById('btnFactionRemoveFunds');
+    const btnSaveFactionNote = document.getElementById('btnSaveFactionNote');
+
+    const formatMoney = (n) => `${n < 0 ? '-' : ''}$${Math.abs(n).toLocaleString('cs-CZ')}`;
+
+    const openFrakceModal = (btn) => {
+        selectedFactionId = btn.getAttribute('data-faction');
+        const label = btn.getAttribute('data-faction-label') || selectedFactionId;
+        const type = btn.getAttribute('data-type') || '–';
+        const account = btn.getAttribute('data-account') || '–';
+        const accountClass = btn.getAttribute('data-account-class') || 'text-success';
+        const balance = Number(btn.getAttribute('data-balance') || 0);
+        const members = btn.getAttribute('data-members') || '0';
+        const boss = btn.getAttribute('data-boss') || '–';
+
+        if (modalFactionTitle) modalFactionTitle.innerText = `Frakce: ${label}`;
+        document.getElementById('modalFactionId').innerText = selectedFactionId;
+        document.getElementById('modalFactionBoss').innerText = boss;
+        document.getElementById('modalFactionType').innerText = type;
+        document.getElementById('modalFactionMembers').innerText = members;
+
+        const accountElem = document.getElementById('modalFactionAccount');
+        accountElem.innerText = account;
+        accountElem.className = accountClass;
+
+        const balanceElem = document.getElementById('modalFactionBalance');
+        balanceElem.innerText = formatMoney(balance);
+        balanceElem.className = balance < 0 ? 'text-danger' : 'text-success';
+        balanceElem.setAttribute('data-balance', String(balance));
+
+        frakceModal?.querySelectorAll('[data-action]').forEach(actionBtn => {
+            actionBtn.setAttribute('data-id', selectedFactionId);
+        });
+
+        document.getElementById('factionNoteInput').value = '';
+        document.getElementById('factionAmountInput').value = '';
+        frakceModal?.classList.add('show');
+    };
+
+    document.querySelectorAll('.btn-frakce-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => openFrakceModal(e.currentTarget));
+    });
+
+    closeFrakceModalBtn?.addEventListener('click', () => {
+        frakceModal?.classList.remove('show');
+        selectedFactionId = null;
+    });
+
+    btnPayFactionSalaries?.addEventListener('click', () => {
+        if (!selectedFactionId) return;
+        if (!confirm('Vynutit vyplacení výplat všem online členům frakce?')) return;
+        sendNUI('executeAction', { action: 'payFactionSalaries', faction: selectedFactionId });
+        showToast('Výplaty byly vyplaceny.', 'success');
+    });
+
+    btnDeleteFaction?.addEventListener('click', () => {
+        if (!selectedFactionId) return;
+        if (!confirm('Opravdu chceš tuto frakci trvale zrušit? Tuto akci nelze vzít zpět.')) return;
+        sendNUI('executeAction', { action: 'deleteFaction', faction: selectedFactionId });
+        showToast('Frakce byla zrušena.', 'danger');
+        frakceModal?.classList.remove('show');
+    });
+
+    const handleFactionFunds = (mode) => {
+        const amount = Number(document.getElementById('factionAmountInput')?.value);
+        if (!selectedFactionId || !amount || amount <= 0) {
+            showToast('Zadej platnou částku.', 'danger');
+            return;
+        }
+        const balanceElem = document.getElementById('modalFactionBalance');
+        const current = Number(balanceElem.getAttribute('data-balance') || 0);
+        const updated = mode === 'add' ? current + amount : current - amount;
+        balanceElem.innerText = formatMoney(updated);
+        balanceElem.className = updated < 0 ? 'text-danger' : 'text-success';
+        balanceElem.setAttribute('data-balance', String(updated));
+
+        sendNUI('executeAction', { action: 'setFactionBalance', mode, faction: selectedFactionId, amount });
+        showToast(
+            mode === 'add' ? `Frakci přidáno ${formatMoney(amount)}.` : `Frakci odebráno ${formatMoney(amount)}.`,
+            'success'
+        );
+        document.getElementById('factionAmountInput').value = '';
+    };
+    btnFactionAddFunds?.addEventListener('click', () => handleFactionFunds('add'));
+    btnFactionRemoveFunds?.addEventListener('click', () => handleFactionFunds('remove'));
+
+    btnSaveFactionNote?.addEventListener('click', () => {
+        const note = document.getElementById('factionNoteInput')?.value.trim();
+        if (!selectedFactionId || !note) {
+            showToast('Poznámka nemůže být prázdná.', 'danger');
+            return;
+        }
+        sendNUI('executeAction', { action: 'saveFactionNote', faction: selectedFactionId, note });
+        showToast('Poznámka k frakci byla uložena.', 'success');
+    });
+
     // --- OBECNÁ FUNKCE PRO VYHLEDÁVÁNÍ/FILTROVÁNÍ KARET ---
     function setupCardFilter({ inputId, selectId, checkboxId, listId }) {
         const input = document.getElementById(inputId);
@@ -172,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     visible = !text.includes('[offline]') && !text.includes('offline');
                 }
 
-                card.style.display = visible ? '' : 'none';
+                card.style.display = visible ? 'flex' : 'none';
             });
         };
 
@@ -669,6 +885,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (dutyStatusLabel) dutyStatusLabel.innerText = onDuty ? 'Na duty' : 'Mimo duty';
             sendNUI('executeAction', { action: 'toggleAdminDuty', state: onDuty });
             showToast(onDuty ? 'Byl jsi nastaven jako aktivní admin (on duty).' : 'Ukončil jsi admin duty.', onDuty ? 'success' : 'warning');
+
+            // Drobná vizuální synchronizace s dashboardem (počet aktivních adminů)
+            const activeAdminsElem = document.getElementById('statActiveAdmins');
+            if (activeAdminsElem) {
+                const current = parseInt(activeAdminsElem.innerText, 10) || 0;
+                activeAdminsElem.innerText = String(Math.max(0, current + (onDuty ? 1 : -1)));
+            }
         });
     }
 
@@ -727,8 +950,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (appContainer) appContainer.style.display = "block";
 
             if (data.dashboard) {
-                const statElem = document.getElementById('statOnlinePlayers');
-                if (statElem) statElem.innerText = `${data.dashboard.online} / ${data.dashboard.max}`;
+                const d = data.dashboard;
+                const setText = (id, value) => {
+                    const el = document.getElementById(id);
+                    if (el && value !== undefined && value !== null) el.innerText = value;
+                };
+                setText('statOnlinePlayers', d.online !== undefined ? `${d.online} / ${d.max}` : undefined);
+                setText('statActiveAdmins', d.activeAdmins);
+                setText('statPendingReports', d.pendingReports);
+                setText('statStatus', d.status);
+                setText('statUptime', d.uptime);
+                setText('statNextRestart', d.nextRestart);
             }
         }
     });
