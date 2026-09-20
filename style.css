@@ -236,6 +236,23 @@ h2 {
   transform: translateY(-2px);
 }
 
+.btn-tool.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #06080f;
+  box-shadow: 0 0 14px #5f84ff66;
+}
+
+.admin-duty {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-duty #dutyStatusLabel {
+  min-width: 76px;
+}
+
 .btn-small {
   padding: 0.5rem 0.95rem;
   font-size: 0.9rem;
@@ -301,6 +318,23 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+/* Zabráníme tomu, aby se běžné checkboxy/radia roztáhly na 100% šířky */
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.inline-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .input-search {
@@ -783,4 +817,50 @@ input:checked + .slider:before {
   .topbar {
     flex-wrap: wrap;
   }
+}
+
+/* --- OZNÁMENÍ (TOASTY) --- */
+.toast-container {
+  position: fixed;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 50;
+  max-width: 320px;
+}
+
+.toast {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+  animation: toastIn 220ms ease-out both;
+}
+
+.toast.success { border-color: var(--success); }
+.toast.danger { border-color: var(--danger); }
+.toast.warning { border-color: var(--warning); }
+
+.toast.hide {
+  animation: toastOut 220ms ease-in both;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(24px); }
+}
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
