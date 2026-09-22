@@ -37,10 +37,10 @@ function showToast(message, type = 'default', duration = 3200) {
 }
 
 // Jednoduchý escape proti XSS při vkládání textu do innerHTML
+// (bez vytváření DOM elementu a vynuceného reflow, jako tomu bylo dřív)
+const HTML_ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.innerText = str;
-    return div.innerHTML;
+    return String(str ?? '').replace(/[&<>"']/g, ch => HTML_ESCAPE_MAP[ch]);
 }
 
 // Globální handlery pro inline onclicky z HTML
@@ -228,6 +228,27 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast(newState ? 'Vozidlo bylo zabaveno do depa.' : 'Vozidlo bylo vydáno z depa.', newState ? 'danger' : 'success');
     });
 
+    const btnRepairVehicleModal = vehicleModal?.querySelector('[data-action="repairVehicleModal"]');
+    const btnRefuelVehicleModal = vehicleModal?.querySelector('[data-action="refuelVehicleModal"]');
+
+    btnRepairVehicleModal?.addEventListener('click', () => {
+        if (!selectedVehiclePlate) return;
+        sendNUI('executeAction', { action: 'repairVehicle', plate: selectedVehiclePlate });
+        const engineElem = document.getElementById('modalVehicleEngine');
+        const bodyElem = document.getElementById('modalVehicleBody');
+        if (engineElem) engineElem.innerText = '100%';
+        if (bodyElem) bodyElem.innerText = '100%';
+        showToast('Vozidlo bylo opraveno a vyčištěno.', 'success');
+    });
+
+    btnRefuelVehicleModal?.addEventListener('click', () => {
+        if (!selectedVehiclePlate) return;
+        sendNUI('executeAction', { action: 'refuelVehicle', plate: selectedVehiclePlate });
+        const fuelElem = document.getElementById('modalVehicleFuel');
+        if (fuelElem) fuelElem.innerText = '100%';
+        showToast('Vozidlo bylo dotankováno.', 'success');
+    });
+
     btnDeleteVehicleModal?.addEventListener('click', () => {
         if (!selectedVehiclePlate) return;
         if (!confirm('Opravdu chceš toto vozidlo trvale smazat? Tuto akci nelze vzít zpět.')) return;
@@ -388,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     visible = !text.includes('[offline]') && !text.includes('offline');
                 }
 
-                card.style.display = visible ? 'flex' : 'none';
+                card.style.display = visible ? '' : 'none';
             });
         };
 
@@ -414,7 +435,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // aby se předešlo duplicitnímu odeslání NUI callbacku.
             const handledElsewhere = [
                 'approveWhitelist', 'rejectWhitelist', 'closeReport', 'openReportChat',
-                'removeAdmin', 'sendAnnouncement'
+                'removeAdmin', 'sendAnnouncement', 'unbanPlayer', 'clearWarn',
+                'repairVehicleModal', 'refuelVehicleModal'
             ];
             if (handledElsewhere.includes(actionType)) return;
 
@@ -429,6 +451,168 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast(`Akce "${actionType}" byla odeslána.`, 'default', 1800);
         });
     });
+
+    // --- PLÁNOVANÝ RESTART SERVERU (obdoba plánovaného restartu v txAdmin) ---
+    const plannedRestartModal = document.getElementById('plannedRestartModal');
+    const btnPlannedrestart = document.getElementById('btnPlannedrestart');
+    const closePlannedRestartModalBtn = document.getElementById('closePlannedRestartModalBtn');
+    const plannedRestartTimeInput = document.getElementById('plannedRestartTimeInput');
+    const plannedRestartMessage = document.getElementById('plannedRestartMessage');
+    const btnConfirmPlannedRestart = document.getElementById('btnConfirmPlannedRestart');
+    const btnCancelPlannedRestart = document.getElementById('btnCancelPlannedRestart');
+    const plannedRestartActiveBox = document.getElementById('plannedRestartActiveBox');
+    const plannedRestartActiveTime = document.getElementById('plannedRestartActiveTime');
+    const plannedRestartCountdown = document.getElementById('plannedRestartCountdown');
+    const statNextRestart = document.getElementById('statNextRestart');
+    const presetButtons = plannedRestartModal ? plannedRestartModal.querySelectorAll('[data-preset]') : [];
+    const warnCheckboxes = plannedRestartModal ? plannedRestartModal.querySelectorAll('[data-warn-min]') : [];
+
+    let scheduledRestartAt = null; // Date, kdy má dojít k restartu
+    let scheduledWarnedMinutes = new Set(); // které varovné hlášky už byly "odeslané" (klientská simulace)
+    let restartCountdownInterval = null;
+
+    const formatClock = (date) => date.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+
+    const formatCountdown = (ms) => {
+        if (ms <= 0) return 'právě teď';
+        const totalMinutes = Math.floor(ms / 60000);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        if (hours > 0) return `${hours} h ${minutes} min`;
+        return `${minutes} min`;
+    };
+
+    function setNextRestartLabel(text) {
+        if (statNextRestart) statNextRestart.innerText = text;
+    }
+
+    function stopRestartCountdown() {
+        if (restartCountdownInterval) {
+            clearInterval(restartCountdownInterval);
+            restartCountdownInterval = null;
+        }
+    }
+
+    function tickRestartCountdown() {
+        if (!scheduledRestartAt) return;
+        const remainingMs = scheduledRestartAt.getTime() - Date.now();
+
+        if (remainingMs <= 0) {
+            if (plannedRestartCountdown) plannedRestartCountdown.innerText = 'probíhá restart…';
+            setNextRestartLabel('Restartuje se…');
+            stopRestartCountdown();
+            return;
+        }
+
+        const remainingLabel = formatCountdown(remainingMs);
+        if (plannedRestartCountdown) plannedRestartCountdown.innerText = remainingLabel;
+        setNextRestartLabel(remainingLabel);
+
+        // Klientská simulace odeslání varovných hlášek (skutečné odeslání řeší server/NUI)
+        const remainingMinutes = Math.round(remainingMs / 60000);
+        warnCheckboxes.forEach(cb => {
+            const minute = Number(cb.getAttribute('data-warn-min'));
+            if (cb.checked && remainingMinutes === minute && !scheduledWarnedMinutes.has(minute)) {
+                scheduledWarnedMinutes.add(minute);
+                showToast(`Varování: server se restartuje za ${minute} min.`, 'warning', 4000);
+            }
+        });
+    }
+
+    function activateScheduledRestartUI() {
+        if (!scheduledRestartAt) return;
+        plannedRestartActiveBox?.classList.remove('hidden');
+        if (plannedRestartActiveTime) plannedRestartActiveTime.innerText = formatClock(scheduledRestartAt);
+        btnPlannedrestart && (btnPlannedrestart.innerText = `Naplánováno: ${formatClock(scheduledRestartAt)}`);
+        stopRestartCountdown();
+        tickRestartCountdown();
+        restartCountdownInterval = setInterval(tickRestartCountdown, 15000);
+    }
+
+    function resetScheduledRestartUI() {
+        scheduledRestartAt = null;
+        scheduledWarnedMinutes = new Set();
+        stopRestartCountdown();
+        plannedRestartActiveBox?.classList.add('hidden');
+        if (btnPlannedrestart) btnPlannedrestart.innerText = 'Naplánovat restart';
+        setNextRestartLabel('Nenaplánováno');
+    }
+
+    btnPlannedrestart?.addEventListener('click', () => {
+        // "Naplánovat restart" už neposílá akci rovnou, ale otevře modal s nastavením
+        presetButtons.forEach(b => b.classList.remove('active'));
+        if (plannedRestartMessage) plannedRestartMessage.value = '';
+        if (plannedRestartTimeInput) plannedRestartTimeInput.value = '';
+        plannedRestartModal?.classList.add('show');
+    });
+
+    closePlannedRestartModalBtn?.addEventListener('click', () => plannedRestartModal?.classList.remove('show'));
+
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            presetButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const minutesFromNow = Number(btn.getAttribute('data-preset'));
+            const target = new Date(Date.now() + minutesFromNow * 60000);
+            if (plannedRestartTimeInput) {
+                const hh = String(target.getHours()).padStart(2, '0');
+                const mm = String(target.getMinutes()).padStart(2, '0');
+                plannedRestartTimeInput.value = `${hh}:${mm}`;
+            }
+        });
+    });
+
+    plannedRestartTimeInput?.addEventListener('input', () => presetButtons.forEach(b => b.classList.remove('active')));
+
+    btnConfirmPlannedRestart?.addEventListener('click', () => {
+        const timeValue = plannedRestartTimeInput?.value;
+        if (!timeValue) {
+            showToast('Zadej čas restartu nebo zvol rychlou volbu.', 'danger');
+            return;
+        }
+
+        const [hh, mm] = timeValue.split(':').map(Number);
+        const target = new Date();
+        target.setSeconds(0, 0);
+        target.setHours(hh, mm);
+        if (target.getTime() <= Date.now()) {
+            // Čas už dnes uplynul -> naplánuj na zítra
+            target.setDate(target.getDate() + 1);
+        }
+
+        const warnMinutes = Array.from(warnCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => Number(cb.getAttribute('data-warn-min')))
+            .sort((a, b) => b - a);
+
+        const message = plannedRestartMessage?.value.trim() || '';
+
+        if (!confirm(`Naplánovat restart serveru na ${formatClock(target)}?`)) return;
+
+        scheduledRestartAt = target;
+        scheduledWarnedMinutes = new Set();
+
+        sendNUI('executeAction', {
+            action: 'scheduleRestart',
+            timestamp: target.getTime(),
+            warnMinutes,
+            message
+        });
+
+        activateScheduledRestartUI();
+        showToast(`Restart naplánován na ${formatClock(target)}.`, 'success');
+        plannedRestartModal?.classList.remove('show');
+    });
+
+    btnCancelPlannedRestart?.addEventListener('click', () => {
+        if (!confirm('Opravdu chceš zrušit naplánovaný restart?')) return;
+        sendNUI('executeAction', { action: 'cancelScheduledRestart' });
+        resetScheduledRestartUI();
+        showToast('Naplánovaný restart byl zrušen.', 'warning');
+    });
+
+    resetScheduledRestartUI();
+
 
     // --- OZNÁMENÍ CELÉMU SERVERU ---
     const btnSendAnnouncement = document.getElementById('btnSendAnnouncement');
@@ -624,6 +808,38 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('banReason').value = '';
         });
     }
+
+    // --- ODBANOVÁNÍ HRÁČE (odstraní řádek a upraví počítadlo) ---
+    const statActiveBans = document.getElementById('statActiveBans');
+    document.querySelectorAll('button[data-action="unbanPlayer"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const target = e.currentTarget;
+            const id = target.getAttribute('data-id');
+            if (!confirm('Opravdu chceš tohoto hráče odbanovat?')) return;
+            sendNUI('executeAction', { action: 'unbanPlayer', id });
+            target.closest('tr')?.remove();
+            if (statActiveBans) {
+                statActiveBans.innerText = String(Math.max(0, (parseInt(statActiveBans.innerText, 10) || 0) - 1));
+            }
+            showToast('Hráč byl odbanován.', 'success');
+        });
+    });
+
+    // --- ZRUŠENÍ VAROVÁNÍ (odstraní řádek a upraví počítadlo) ---
+    const statActiveWarns = document.getElementById('statActiveWarns');
+    document.querySelectorAll('button[data-action="clearWarn"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const target = e.currentTarget;
+            const id = target.getAttribute('data-id');
+            if (!confirm('Opravdu chceš toto varování zrušit?')) return;
+            sendNUI('executeAction', { action: 'clearWarn', id });
+            target.closest('tr')?.remove();
+            if (statActiveWarns) {
+                statActiveWarns.innerText = String(Math.max(0, (parseInt(statActiveWarns.innerText, 10) || 0) - 1));
+            }
+            showToast('Varování bylo zrušeno.', 'success');
+        });
+    });
 
     // --- VYHLEDÁVÁNÍ V BANECH ---
     const banSearchInput = document.getElementById('banSearchInput');
