@@ -69,7 +69,7 @@
                 <div class="panel">
                     <div class="status-grid">
                         <div class="panel-status">
-                            <span class="k">Status</span>
+                            <span class="k">Server status</span>
                             <strong id="statStatus">Online</strong>
                         </div>
                         <div class="panel-status">
@@ -84,13 +84,12 @@
                 </div>
 
                 <div class="actions">
-                    <button class="btn btn-danger" data-action="offserver"
-                        data-confirm="Opravdu chceš vypnout server pro všechny hráče?">Vypnout server</button>
-                    <button class="btn btn-danger" data-action="restartWarning"
-                        data-confirm="Odeslat všem hráčům varování o blížícím se restartu?">Restart serveru</button>
-                    <button class="btn btn-danger" data-action="kickAll"
-                        data-confirm="Opravdu chceš vyhodit VŠECHNY hráče ze serveru?">Vyhodit všechny hráče</button>
+                    <button class="btn btn-danger" data-action="offserver" data-confirm="Opravdu chceš vypnout server pro všechny hráče?">Vypnout server</button>
+                    <button class="btn btn-danger" data-action="restartWarning" data-confirm="Odeslat všem hráčům varování o blížícím se restartu?">Restart serveru</button>
+                    <button class="btn btn-danger" data-action="kickAll" data-confirm="Opravdu chceš vyhodit VŠECHNY hráče ze serveru?">Vyhodit všechny hráče</button>
                     <button class="btn btn-ghost" id="btnSendAnnouncement" data-action="sendAnnouncement">Odeslat oznámení</button>
+                    <button class="btn btn-ghost" id="btnPlannedrestart" data-action="plannedrestart">Naplánovat restart</button>
+
                 </div>
             </section>
 
@@ -119,7 +118,7 @@
                 <div class="panel">
                     <div class="section-row">
                         <input type="text" id="playerSearchInput" class="input-search"
-                            placeholder="userId, username, license2, steam, fivem, discord"> Filter:
+                            placeholder="userId, username, license, steam, fivem, discord"> Filter:
                         <select id="playerSearchType" class="input-search2">
                             <option value="none">Žádný filtr</option>
                             <option value="admin">Je admin</option>
@@ -246,8 +245,9 @@
                                     <td><span class="badge badge-danger">Permanentní</span></td>
                                     <td>Karlos</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="unbanPlayer"
-                                            data-id="9f11c02">Odbanovat</button>
+                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="9f11c02">Odbanovat</button>
+                                        <button class="btn btn-small" data-action="editban" data-id="9f11c02">Edit</button>
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -258,8 +258,8 @@
                                     <td><span class="badge badge-warning">Za 6 dní</span></td>
                                     <td>David_Mod</td>
                                     <td class="table-actions">
-                                        <button class="btn btn-small" data-action="unbanPlayer"
-                                            data-id="33ab910">Odbanovat</button>
+                                        <button class="btn btn-small" data-action="unbanPlayer" data-id="33ab910">Odbanovat</button>
+                                        <button class="btn btn-small" data-action="editban" data-id="33ab910">Edit</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -325,7 +325,7 @@
                         <div class="card">
                             <h3>Karin Sultan Classic</h3>
                             <p>SPZ: <code>3ABC123</code></p>
-                            <p>VIN: 1FTAX1EF0...</p>
+                            <p>VIN: 1FTAX1EF0...</p>ř
                             <p>Majitel: Karel Cigan [15]</p>
                             <p>Stav: <span class="badge badge-success">Zaparkované ve světě</span></p>
                             <button class="btn btn-small btn-vehicle-modal" data-plate="3ABC123"
@@ -1122,15 +1122,15 @@
             <div class="status-grid">
                 <div class="panel-status">
                     <span class="k">Session Time</span>
-                    <strong id="modalSessionTime">24min</strong>
+                    <strong id="modalSessionTime">24 minut</strong>
                 </div>
                 <div class="panel-status">
                     <span class="k">Play Time</span>
-                    <strong id="modalPlayTime">2h</strong>
+                    <strong id="modalPlayTime">2 hodiny</strong>
                 </div>
                 <div class="panel-status">
                     <span class="k">Join Date</span>
-                    <strong id="modalJoinDate" class="text-danger">3.3.2001</strong>
+                    <strong id="modalJoinDate" class="text-danger">3.9.2026</strong>
                 </div>
                 <div class="panel-status">
                     <span class="k">Má wl</span>
@@ -1141,14 +1141,14 @@
             <div class="card" style="margin-top: 1.2rem;">
                 <h3>Identifikátory</h3>
                 <div class="text-block" id="modalIdentifiers">
-                    <p>charid</p>
-                    <p>userid</p>
-                    <p>stateid</p>
-                    <p>username</p>
-                    <p>steam</p>
-                    <p>fivem</p>
-                    <p>license</p>
-                    <p>Discord</p>
+                    <p>Charid: <code>textdadas</code></p>
+                    <p>Userid: <code>textdadas</code></p>
+                    <p>Stateid: <code>textdadas</code></p>
+                    <p>Username: <code>textdadas</code></p>
+                    <p>Steam: <code>textdadas</code></p>
+                    <p>Fivem: <code>textdadas</code></p>
+                    <p>License: <code>textdadas</code></p>
+                    <p>Discord: <code>textdadas</code></p>
                     <p>IP: <code>89.24.xx.xx</code></p>
                 </div>
             </div>
@@ -1387,6 +1387,66 @@
             </div>
             <button class="btn btn-small" id="btnConfirmAddAdmin" style="margin-top: 1.2rem;">Přidat
                 administrátora</button>
+        </div>
+    </div>
+
+    <!-- MODAL: NAPLÁNOVÁNÍ RESTARTU -->
+    <div id="plannedRestartModal" class="modal">
+        <div class="modal-box">
+            <button class="modal-close" id="closePlannedRestartModalBtn">✕</button>
+            <h2>Naplánovat restart serveru</h2>
+            <p class="lead" style="margin-top: 0.4rem;">Nastav čas restartu a intervaly varovných hlášek pro hráče.
+            </p>
+
+            <div id="plannedRestartActiveBox" class="card hidden" style="margin-top: 1rem; border-color: var(--danger);">
+                <h3>Aktuálně naplánovaný restart</h3>
+                <p>Restart proběhne v <strong id="plannedRestartActiveTime">–</strong> (za
+                    <span id="plannedRestartCountdown">–</span>)
+                </p>
+                <button class="btn btn-small btn-danger" id="btnCancelPlannedRestart" style="margin-top: 0.6rem;">Zrušit
+                    naplánovaný restart</button>
+            </div>
+
+            <div class="card" style="margin-top: 1rem;">
+                <h3>Rychlá volba</h3>
+                <div class="actions" style="margin-top: 0.6rem;">
+                    <button type="button" class="btn btn-small btn-tool" data-preset="15">Za 15 minut</button>
+                    <button type="button" class="btn btn-small btn-tool" data-preset="30">Za 30 minut</button>
+                    <button type="button" class="btn btn-small btn-tool" data-preset="60">Za 1 hodinu</button>
+                    <button type="button" class="btn btn-small btn-tool" data-preset="120">Za 2 hodiny</button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Přesný čas</h3>
+                <div class="form-group">
+                    <label for="plannedRestartTimeInput">Čas restartu (pokud čas dnes už uplynul, naplánuje se na
+                        zítra)</label>
+                    <input type="time" id="plannedRestartTimeInput">
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0.9rem;">
+                <h3>Varovné hlášky před restartem</h3>
+                <div class="permissions-grid">
+                    <label class="permission-item"><input type="checkbox" data-warn-min="60"> 60 minut</label>
+                    <label class="permission-item"><input type="checkbox" data-warn-min="30" checked> 30
+                        minut</label>
+                    <label class="permission-item"><input type="checkbox" data-warn-min="15" checked> 15
+                        minut</label>
+                    <label class="permission-item"><input type="checkbox" data-warn-min="5" checked> 5 minut</label>
+                    <label class="permission-item"><input type="checkbox" data-warn-min="1" checked> 1
+                        minuta</label>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 0.9rem;">
+                <label for="plannedRestartMessage">Vlastní zpráva (nepovinné)</label>
+                <input type="text" id="plannedRestartMessage" placeholder="např. Restart kvůli aktualizaci serveru...">
+            </div>
+
+            <button class="btn btn-small" id="btnConfirmPlannedRestart" style="margin-top: 1.2rem;">Naplánovat
+                restart</button>
         </div>
     </div>
 
